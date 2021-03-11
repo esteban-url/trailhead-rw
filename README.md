@@ -211,7 +211,7 @@ export default Routes
 ```
 
 
-### Add Admin pages
+### User management pages
 ```sh
 yarn rw g page admin-users
 ```
@@ -310,6 +310,378 @@ const Navigation = () => {
 
 export default Navigation
 ```
+
+
+### Usermanagement API
+
+```sh
+yarn rw generate function userCreate
+```
+```js
+const fetch = require('node-fetch')
+
+exports.handler = async (event, context) => {
+  const { identity, user } = context.clientContext
+  const roles = user ? user.app_metadata.roles : false
+  const allowedRoles = ['admin']
+  const usersUrl = `${identity.url}/admin/users`
+  const adminAuthHeader = 'Bearer ' + identity.token
+
+  try {
+    if (roles.some((role) => allowedRoles.includes(role))) {
+      return fetch(usersUrl, {
+        method: 'POST',
+        headers: { Authorization: adminAuthHeader },
+        body: JSON.stringify({ ...JSON.parse(event.body), confirm: true }),
+      })
+        .then((response) => {
+          return response.json()
+        })
+        .then((data) => {
+          if (data.code) {
+            console.info(`Error ${data.code}: ${data.msg}`)
+
+            return {
+              statusCode: data.code,
+              body: JSON.stringify({ error: data.msg }),
+            }
+          }
+          console.info('Created a user! 204!')
+          console.info(JSON.stringify({ data }))
+          return { statusCode: 204 }
+        })
+        .catch((error) => {
+          console.info(error)
+          return {
+            statusCode: 500,
+            body: 'Internal Server Error: ' + error,
+          }
+        })
+    } else {
+      return { statusCode: 401 }
+    }
+  } catch (error) {
+    console.info(error)
+    return error
+  }
+}
+
+```
+```sh
+yarn rw generate function userDelete
+```
+```js
+const fetch = require('node-fetch')
+
+exports.handler = async (event, context) => {
+  const { identity, user } = context.clientContext
+  const { id } = JSON.parse(event.body)
+  const roles = user ? user.app_metadata.roles : false
+  const allowedRoles = ['admin']
+  const userUrl = `${identity.url}/admin/users/{${id}}`
+  const adminAuthHeader = 'Bearer ' + identity.token
+
+  try {
+    if (roles.some((role) => allowedRoles.includes(role))) {
+      return fetch(userUrl, {
+        method: 'DELETE',
+        headers: { Authorization: adminAuthHeader },
+      })
+        .then((response) => {
+          console.info(`Deleted a user: ${id}`)
+          return response.json()
+        })
+        .then(() => {
+          return { statusCode: 204 }
+        })
+        .catch((error) => {
+          return {
+            statusCode: 500,
+            body: 'Internal Server Error: ' + error,
+          }
+        })
+    } else {
+      return { statusCode: 401 }
+    }
+  } catch (error) {
+    console.info(error)
+    return error
+  }
+}
+```
+```sh
+yarn rw generate function userGet
+```
+```js
+const fetch = require('node-fetch')
+
+exports.handler = async (event, context) => {
+  const { identity, user } = context.clientContext
+  const { id } = JSON.parse(event.body)
+  const roles = user.app_metadata?.roles || []
+  const allowedRoles = ['admin']
+  const userUrl = `${identity.url}/admin/users/{${id}}`
+  const adminAuthHeader = 'Bearer ' + identity.token
+  try {
+    if (roles.some((role) => allowedRoles.includes(role))) {
+      return fetch(userUrl, {
+        method: 'GET',
+        headers: { Authorization: adminAuthHeader },
+      })
+        .then((response) => {
+          return response.json()
+        })
+        .then((data) => {
+          if (data.code) {
+            console.info(`Error ${data.code}: ${data.msg}`)
+            return {
+              statusCode: data.code,
+              body: JSON.stringify({ error: data.msg }),
+            }
+          }
+          return { statusCode: 200, body: JSON.stringify(data) }
+        })
+        .catch((e) => {
+          return {
+            statusCode: 500,
+            body: 'Internal Server Error: ' + e,
+          }
+        })
+    } else {
+      return { statusCode: 401 }
+    }
+  } catch (error) {
+    console.info(error)
+    return {
+      statusCode: 500,
+      body: 'Internal Server Error: ' + error,
+    }
+  }
+}
+```
+```sh
+yarn rw generate function userUpdate
+```
+```js
+const fetch = require('node-fetch')
+
+exports.handler = async (event, context) => {
+  const { identity, user } = context.clientContext
+  const roles = user ? user.app_metadata.roles : false
+  const updatedUser = JSON.parse(event.body)
+  const allowedRoles = ['admin']
+  const usersUrl = `${identity.url}/admin/users/${updatedUser.id}`
+  const adminAuthHeader = 'Bearer ' + identity.token
+
+  try {
+    if (roles.some((role) => allowedRoles.includes(role))) {
+      return fetch(usersUrl, {
+        method: 'PUT',
+        headers: { Authorization: adminAuthHeader },
+        body: JSON.stringify(updatedUser),
+      })
+        .then((response) => {
+          return response.json()
+        })
+        .then((data) => {
+          console.info('Updated a user! 204!')
+          console.info(JSON.stringify({ data }))
+          return { statusCode: 204 }
+        })
+        .catch((error) => {
+          console.info(error)
+          return {
+            statusCode: 500,
+            body: 'Internal Server Error: ' + error,
+          }
+        })
+    } else {
+      return { statusCode: 401 }
+    }
+  } catch (error) {
+    console.info(error)
+    return error
+  }
+}
+```
+```sh
+yarn rw generate function usersList
+```
+```js
+const fetch = require('node-fetch')
+
+exports.handler = async (event, context) => {
+  const { identity, user } = context.clientContext
+  const roles = user.app_metadata?.roles || []
+  const allowedRoles = ['admin']
+  const usersUrl = `${identity.url}/admin/users`
+  const adminAuthHeader = 'Bearer ' + identity.token
+  try {
+    if (roles.some((role) => allowedRoles.includes(role))) {
+      return fetch(usersUrl, {
+        method: 'GET',
+        headers: { Authorization: adminAuthHeader },
+      })
+        .then((response) => {
+          return response.json()
+        })
+        .then((data) => {
+          if (data.code) {
+            console.info(`Error ${data.code}: ${data.msg}`)
+            return {
+              statusCode: data.code,
+              body: JSON.stringify({ error: data.msg }),
+            }
+          }
+          return { statusCode: 200, body: JSON.stringify(data) }
+        })
+        .catch((e) => {
+          return {
+            statusCode: 500,
+            body: 'Internal Server Error: ' + e,
+          }
+        })
+    } else {
+      return { statusCode: 401 }
+    }
+  } catch (error) {
+    console.info(error)
+    return {
+      statusCode: 500,
+      body: 'Internal Server Error: ' + error,
+    }
+  }
+}
+```
+
+### Authorized fetch
+Netlify exposes admin methods to interact with Identity, but you need to make an authoried fetch to the user management API [read more](https://github.com/netlify/gotrue-js#admin-methods).
+This file exposes a Async wrapper around fetch so those calls can me made
+
+
+```sh
+# create directory
+mkdir web/src/utils
+```
+```sh
+# create file
+touch web/src/utils/authorizedFetch.js
+```
+```jsx
+const authorizedFetch = (client, url, options) => {
+  if (!client?.currentUser().token)
+    throw new Error('Cannot authorizedFetch while logged out')
+  return fetch(url, {
+    ...options,
+    headers: {
+      ...options?.headers,
+      Authorization: `Bearer ${client.currentUser().token.access_token}`,
+    },
+  }).then(async (response) => {
+    const data = await response
+    if (data.ok) {
+      switch (data.status) {
+        case 204:
+          return data
+        default:
+          return data.json()
+      }
+    } else {
+      const error = {
+        message: data?.statusText,
+      }
+      return Promise.reject(error)
+    }
+  })
+}
+
+function useSafeDispatch(dispatch) {
+  const mounted = React.useRef(false)
+  React.useLayoutEffect(() => {
+    mounted.current = true
+    return () => (mounted.current = false)
+  }, [])
+  return React.useCallback(
+    (...args) => (mounted.current ? dispatch(...args) : void 0),
+    [dispatch]
+  )
+}
+
+// Example usage:
+// const { client } = useAuth()
+// const {data, error, status, run} = useAsync()
+// useEffect(() => {
+//   run(authorizedFetch(client, '/.netlify/functions/usersList'))
+// }, [client, run])
+const defaultInitialState = { status: 'idle', data: null, error: null }
+function useAsync(initialState) {
+  const initialStateRef = React.useRef({
+    ...defaultInitialState,
+    ...initialState,
+  })
+  const [{ status, data, error }, setState] = React.useReducer(
+    (s, a) => ({ ...s, ...a }),
+    initialStateRef.current
+  )
+
+  const safeSetState = useSafeDispatch(setState)
+
+  const setData = React.useCallback(
+    (data) => safeSetState({ data, status: 'resolved' }),
+    [safeSetState]
+  )
+  const setError = React.useCallback(
+    (error) => safeSetState({ error, status: 'rejected' }),
+    [safeSetState]
+  )
+  const reset = React.useCallback(() => safeSetState(initialStateRef.current), [
+    safeSetState,
+  ])
+
+  const run = React.useCallback(
+    (promise) => {
+      if (!promise || !promise.then) {
+        throw new Error(
+          `The argument passed to useAsync().run must be a promise. Maybe a function that's passed isn't returning anything?`
+        )
+      }
+      safeSetState({ status: 'pending' })
+      return promise.then(
+        (data) => {
+          setData(data)
+          return data
+        },
+        (error) => {
+          setError(error)
+          return Promise.reject(error)
+        }
+      )
+    },
+    [safeSetState, setData, setError]
+  )
+
+  return {
+    // using the same names that react-query uses for convenience
+    isIdle: status === 'idle',
+    isLoading: status === 'pending',
+    isError: status === 'rejected',
+    isSuccess: status === 'resolved',
+
+    setData,
+    setError,
+    error,
+    status,
+    data,
+    run,
+    reset,
+  }
+}
+
+export { useAsync, authorizedFetch }
+```
+
+
+
 
 ---
 # Redwood

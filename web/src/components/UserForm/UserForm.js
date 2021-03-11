@@ -10,9 +10,11 @@ import {
   Submit,
   TextField,
 } from '@redwoodjs/forms/dist'
+import { toast } from '@redwoodjs/web/toast'
 import FormField from 'src/components/FormField/FormField'
+import { navigate, routes } from '@redwoodjs/router'
 
-const UserForm = ({ user, onUserSaved }) => {
+const UserForm = ({ user }) => {
   const { client } = useAuth()
 
   const { isSuccess, isError, error, run } = useAsync()
@@ -29,12 +31,13 @@ const UserForm = ({ user, onUserSaved }) => {
   })
   useEffect(() => {
     if (isError) {
-      console.error({ error })
+      toast.error('The user could not be created')
     }
     if (isSuccess) {
-      onUserSaved()
+      toast.success('User created!')
+      navigate(routes.adminUsers())
     }
-  }, [error, isSuccess, isError, onUserSaved])
+  }, [error, isSuccess, isError])
 
   const onSubmit = (data) => {
     let roles = []

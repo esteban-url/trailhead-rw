@@ -12,18 +12,28 @@ To be perfectly honest this is not how I actually build it. This is the "_clean_
 
 There was pain, blood and tears, way many commits, errors, re-tries, deploys to get everything working.
 
+### Create the app
+
 ```sh
 yarn create redwood-app trailhead-rw
 ```
 ```sh
 cd  trailhead-rw
 ```
+### Setup the auth configuration
+Using netlify
 ```sh
 yarn rw setup auth netlify
 ```
+
+### Setup the deployment configuration
+Using netlify
 ```sh
-yarn rw g page private
+yarn rw setup deploy netlify
 ```
+### Add basic pages
+These pages will create the basic for for initially testing auth
+
 ```sh
 yarn rw g page about --tests false
 ```
@@ -42,7 +52,9 @@ const AboutPage = () => {
 
 export default AboutPage
 ```
-```yarn rw g page private```
+```sh
+yarn rw g page private
+```
 ```jsx
 // src/pages/PrivatePage/PrivatePage.js
 import { Link, routes } from '@redwoodjs/router'
@@ -102,6 +114,7 @@ const HomePage = () => {
 
 export default HomePage
 ```
+Edit the routes so that private is in fact private
 ```jsx
 // src/Routes.js
 import { Router, Route, Private } from '@redwoodjs/router'
@@ -121,6 +134,9 @@ const Routes = () => {
 
 export default Routes
 ```
+
+
+
 ---
 # Redwood
  **WARNING:** RedwoodJS software has not reached a stable version 1.0 and should not be considered suitable for production use. In the "make it work; make it right; make it fast" paradigm, Redwood is in the later stages of the "make it work" phase.

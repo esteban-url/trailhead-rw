@@ -31,6 +31,102 @@ Using netlify
 ```sh
 yarn rw setup deploy netlify
 ```
+### Add navigation and layouts
+```sh
+yarn rw g component navigation
+```
+```jsx
+// src/components/Navigation/Navigation.js
+
+import { useAuth } from '@redwoodjs/auth'
+import { Link, routes } from '@redwoodjs/router'
+const Navigation = () => {
+  const { logIn, logOut, isAuthenticated, currentUser, hasRole } = useAuth()
+  return (
+    <nav
+      // inline styles to be removed
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        flexGrow: 'stretch',
+      }}
+    >
+      <Link to={routes.home()} style={{ marginRight: '1rem' }}>
+        <h1>Trailhead</h1>
+      </Link>
+
+      {isAuthenticated ? (
+        // inline styles to be removed
+        <Link to={routes.private()} style={{ marginRight: '1rem' }}>
+          Private
+        </Link>
+      ) : null}
+      {/* // inline styles to be removed */}
+      <Link to={routes.about()} style={{ marginRight: '1rem' }}>
+        About
+      </Link>
+      {isAuthenticated ? (
+        <>
+          {/* // inline styles to be removed */}
+          <p style={{ marginRight: '1rem' }}>
+            Welcome, {currentUser.user_metadata.full_name}
+          </p>
+          <button onClick={logOut}>Sign out</button>
+        </>
+      ) : (
+        <button onClick={logIn}>Log in</button>
+      )}
+    </nav>
+  )
+}
+
+export default Navigation
+```
+```sh
+yarn rw g layout public
+```
+```jsx
+// src/layouts/PublicLayout/PublicLayout.js
+
+import Navigation from 'src/components/Navigation/Navigation'
+
+const PublicLayout = ({ children }) => {
+  return (
+    <>
+      <Navigation />
+      {children}
+    </>
+  )
+}
+
+export default PublicLayout
+```
+```sh
+yarn rw g layout admin
+```
+```jsx
+// src/layouts/AdminLayout/AdminLayout.js
+
+import Navigation from 'src/components/Navigation/Navigation'
+
+const AdminLayout = ({ children }) => {
+  return (
+    <div style={{ backgroundColor: '#ccc' }}>
+      <Navigation />
+      {children}
+    </div>
+  )
+}
+
+export default AdminLayout
+```
+### Admin pages
+```sh
+yarn rw g page admin-new-user
+```
+```sh
+yarn rw g page admin-users
+```
 ### Add basic pages
 These pages will create the basic for for initially testing auth
 
@@ -39,36 +135,38 @@ yarn rw g page about --tests false
 ```
 ```jsx
 // src/pages/AboutPage/AboutPage.js
-import { Link, routes } from '@redwoodjs/router'
+
+import PublicLayout from 'src/layouts/PublicLayout/PublicLayout'
 
 const AboutPage = () => {
   return (
-    <>
+    <PublicLayout>
       <h1>About Trailhead</h1>
-      <Link to={routes.home()}>Home</Link>
-    </>
+    </PublicLayout>
   )
 }
 
 export default AboutPage
+
 ```
 ```sh
 yarn rw g page private
 ```
 ```jsx
 // src/pages/PrivatePage/PrivatePage.js
-import { Link, routes } from '@redwoodjs/router'
+
+import PublicLayout from 'src/layouts/PublicLayout/PublicLayout'
 
 const PrivatePage = () => {
   return (
-    <>
+    <PublicLayout>
       <h1>Private Page</h1>
       <p>this is for logged in trailhead users only</p>
-
-      <Link to={routes.home()}>Home</Link>
-    </>
+    </PublicLayout>
   )
 }
+
+export default PrivatePage
 
 export default PrivatePage
 ```
@@ -77,38 +175,14 @@ yarn rw g page home --tests false
 ```
 ```jsx
 // src/pages/HomePage/HomePage.js
-import { Link, routes } from '@redwoodjs/router'
-import { useAuth } from '@redwoodjs/auth'
+
+import PublicLayout from 'src/layouts/PublicLayout/PublicLayout'
 
 const HomePage = () => {
-  const { logIn, logOut, isAuthenticated, currentUser } = useAuth()
   return (
-    <>
-      <h1>Trailhead</h1>
-
-      {isAuthenticated ? (
-        <p>
-          <Link to={routes.private()}>Private</Link>
-        </p>
-      ) : null}
-      <p>
-        <Link to={routes.about()}>About</Link>
-      </p>
-      <p>
-        {isAuthenticated ? (
-          <a href="#" onClick={logOut}>
-            Sign out
-          </a>
-        ) : (
-          <a href="#" onClick={logIn}>
-            Log in
-          </a>
-        )}
-      </p>
-      {isAuthenticated ? (
-        <p>Welcome, {currentUser.user_metadata.full_name}</p>
-      ) : null}
-    </>
+    <PublicLayout>
+      <h1>hi there!</h1>
+    </PublicLayout>
   )
 }
 
@@ -117,6 +191,7 @@ export default HomePage
 Edit the routes so that private is in fact private
 ```jsx
 // src/Routes.js
+
 import { Router, Route, Private } from '@redwoodjs/router'
 
 const Routes = () => {
@@ -136,6 +211,105 @@ export default Routes
 ```
 
 
+### Add Admin pages
+```sh
+yarn rw g page admin-users
+```
+```jsx
+// src/pages/AdminNewUserPage/AdminUsersPage.js
+
+import { Link, routes } from '@redwoodjs/router'
+import AdminLayout from 'src/layouts/AdminLayout/AdminLayout'
+
+const AdminUsersPage = () => {
+  return (
+    <AdminLayout>
+      <h1>Users</h1>
+      <p>
+        <Link to={routes.adminNewUser()}>Create new user</Link>
+      </p>
+    </AdminLayout>
+  )
+}
+
+export default AdminUsersPage
+```
+```sh
+yarn rw g page admin-new-user
+```
+```jsx
+// src/pages/AdminNewUserPage/AdminNewUserPage.js
+
+import { Link, routes } from '@redwoodjs/router'
+import AdminLayout from 'src/layouts/AdminLayout/AdminLayout'
+
+const AdminNewUserPage = () => {
+  return (
+    <AdminLayout>
+      <h1>Create a new user</h1>
+      <Link to={routes.adminUsers()}>Users</Link>
+    </AdminLayout>
+  )
+}
+
+export default AdminNewUserPage
+```
+
+
+update navigation
+```jsx
+// src/components/Navigation/Navigation.js
+
+import { useAuth } from '@redwoodjs/auth'
+import { Link, routes } from '@redwoodjs/router'
+const Navigation = () => {
+  const { logIn, logOut, isAuthenticated, currentUser, hasRole } = useAuth()
+  return (
+    <nav
+      // inline styles to be removed
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        flexGrow: 'stretch',
+      }}
+    >
+      <Link to={routes.home()} style={{ marginRight: '1rem' }}>
+        <h1>Trailhead</h1>
+      </Link>
+
+      {isAuthenticated ? (
+        // inline styles to be removed
+        <Link to={routes.private()} style={{ marginRight: '1rem' }}>
+          Private
+        </Link>
+      ) : null}
+      {hasRole('admin') ? (
+        // inline styles to be removed
+        <Link to={routes.adminUsers()} style={{ marginRight: '1rem' }}>
+          Admin
+        </Link>
+      ) : null}
+      {/* // inline styles to be removed */}
+      <Link to={routes.about()} style={{ marginRight: '1rem' }}>
+        About
+      </Link>
+      {isAuthenticated ? (
+        <>
+          {/* // inline styles to be removed */}
+          <p style={{ marginRight: '1rem' }}>
+            Welcome, {currentUser.user_metadata.full_name}
+          </p>
+          <button onClick={logOut}>Sign out</button>
+        </>
+      ) : (
+        <button onClick={logIn}>Log in</button>
+      )}
+    </nav>
+  )
+}
+
+export default Navigation
+```
 
 ---
 # Redwood

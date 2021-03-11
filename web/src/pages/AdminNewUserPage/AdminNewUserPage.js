@@ -1,17 +1,12 @@
 import { Link, routes } from '@redwoodjs/router'
+import AdminLayout from 'src/layouts/AdminLayout/AdminLayout'
 
 const AdminNewUserPage = () => {
   return (
-    <>
+    <AdminLayout>
       <h1>Create a new user</h1>
-
-      <p>
-        <Link to={routes.adminUsers()}>Users</Link>
-      </p>
-      <p>
-        <Link to={routes.home()}>Home</Link>
-      </p>
-    </>
+      <Link to={routes.adminUsers()}>Users</Link>
+    </AdminLayout>
   )
 }
 

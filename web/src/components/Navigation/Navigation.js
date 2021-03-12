@@ -35,7 +35,7 @@ const Navigation = () => {
         <>
           {/* // inline styles to be removed */}
           <p style={{ marginRight: '1rem' }}>
-            Welcome, {currentUser.user_metadata.full_name}
+            Welcome, {currentUser?.user_metadata?.full_name}
           </p>
           <button onClick={logOut}>Sign out</button>
         </>

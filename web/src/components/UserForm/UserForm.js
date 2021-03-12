@@ -31,10 +31,10 @@ const UserForm = ({ user }) => {
   })
   useEffect(() => {
     if (isError) {
-      toast.error('The user could not be created')
+      toast.error('The user could not be saved')
     }
     if (isSuccess) {
-      toast.success('User created!')
+      toast.success('User saved!')
       navigate(routes.adminUsers())
     }
   }, [error, isSuccess, isError])

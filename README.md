@@ -764,10 +764,10 @@ const UserForm = ({ user }) => {
   })
   useEffect(() => {
     if (isError) {
-      toast.error('The user could not be created')
+      toast.error('The user could not be saved')
     }
     if (isSuccess) {
-      toast.success('User created!')
+      toast.success('User saved!')
       navigate(routes.adminUsers())
     }
   }, [error, isSuccess, isError])
@@ -859,6 +859,235 @@ const UserForm = ({ user }) => {
 
 export default UserForm
 ```
+```sh
+yarn rw g component usersList
+```
+```jsx
+// src/components/UsersList/UsersList.js
+
+import { routes } from '@redwoodjs/router'
+import { Link } from '@redwoodjs/router'
+const UsersList = ({ users }) => {
+  if (!users) return <p>There are no users to show.</p>
+  return (
+    <ul>
+      {users?.map((user) => (
+        <li key={user.email}>
+          {/* // inline styles to be removed */}
+          <span style={{ marginRight: '1rem' }}>
+            {user.user_metadata.full_name} - {user.email}
+          </span>
+
+          {user.app_metadata?.roles
+            ? user.app_metadata.roles.map((role) => (
+                // inline styles to be removed
+                <span key={role} style={{ marginRight: '1rem' }}>
+                  {' '}
+                  {role}{' '}
+                </span>
+              ))
+            : null}
+          {/* // inline styles to be removed */}
+          <Link
+            to={routes.adminViewUser({ id: user.id })}
+            style={{ marginRight: '1rem' }}
+          >
+            {' '}
+            view{' '}
+          </Link>
+          <Link to={routes.adminUpdateUser({ id: user.id })}> edit </Link>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+export default UsersList
+
+```
+
+Update the admin users page
+
+```jsx
+ // src/pages/AdminUsersPage/AdminUsersPage.js
+
+import { useEffect } from 'react'
+import { Link, routes } from '@redwoodjs/router'
+import { useAuth } from '@redwoodjs/auth'
+import ListUsers from 'src/components/ListUsers/ListUsers'
+import AdminLayout from 'src/layouts/AdminLayout/AdminLayout'
+import { useAsync, authorizedFetch } from 'src/hooks/authorizedFetch'
+
+const AdminUsersPage = () => {
+  const { client } = useAuth()
+  const { data, isLoading, isError, isSuccess, error, run } = useAsync()
+
+  useEffect(() => {
+    run(authorizedFetch(client, '/.netlify/functions/usersList'))
+  }, [client, run])
+
+  return (
+    <AdminLayout>
+      <Link to={routes.newUser()} className="rw-link">
+        Create new user
+      </Link>
+
+      {isSuccess ? <ListUsers users={data.users} /> : null}
+      {isLoading ? <p>loading...</p> : null}
+      {isError ? <p>{error.message}</p> : null}
+    </AdminLayout>
+  )
+}
+
+export default AdminUsersPage
+```
+
+```sh
+yarn rw g page adminUpdateUser
+```
+```jsx
+// src/pages/AdminUpdateUserPage/AdminUpdateUserPage.js
+
+import { useAuth } from '@redwoodjs/auth'
+import { Link, routes, navigate } from '@redwoodjs/router'
+import { useEffect, useState } from 'react'
+import { toast } from '@redwoodjs/web/toast'
+import UserForm from 'src/components/UserForm/UserForm'
+import { authorizedFetch, useAsync } from 'src/utils/authorizedFetch'
+import AdminLayout from 'src/layouts/AdminLayout/AdminLayout'
+
+const AdminUpdateUserPage = ({ id }) => {
+  const { client } = useAuth()
+  const { data: user, isLoading, isError, isSuccess, error, run } = useAsync()
+
+  const [deletingUser, setDeletingUser] = useState(false)
+
+  useEffect(() => {
+    if (deletingUser) {
+      if (isError) {
+        toast.error('User not deleted!')
+      }
+      if (isSuccess) {
+        toast.success('User deleted!')
+        navigate(routes.adminUsers())
+      }
+    }
+  }, [deletingUser, isSuccess, isError, error])
+  //initial data load
+  useEffect(() => {
+    run(
+      authorizedFetch(client, '/.netlify/functions/userGet', {
+        method: 'POST',
+        body: JSON.stringify({ id }),
+      })
+    )
+  }, [client, id, run])
+
+  const handleDelete = () => {
+    if (confirm(`Are you sure you want to delete ${user.email}?`)) {
+      setDeletingUser(true)
+      run(
+        authorizedFetch(client, '/.netlify/functions/userDelete', {
+          method: 'POST',
+          body: JSON.stringify({ id: user.id }),
+        })
+      )
+    }
+  }
+
+  return (
+    <AdminLayout>
+      <Link to={routes.admin()}>back to list</Link>
+      {isSuccess ? (
+        <>
+          <UserForm user={user} />
+          <button type="button" onClick={() => handleDelete()}>
+            delete user
+          </button>
+        </>
+      ) : null}
+      {isLoading ? <p>loading...</p> : null}
+      {isError ? <p>{error}</p> : null}
+    </AdminLayout>
+  )
+}
+
+export default AdminUpdateUserPage
+```
+
+```sh
+yarn rw g page adminViewUser
+```
+```tsx
+// src/pages/AdminViewUserPage/AdminViewUserPage.js
+
+import { useAsync, authorizedFetch } from 'src/utils/authorizedFetch'
+import { useAuth } from '@redwoodjs/auth'
+import { useEffect } from 'react'
+import AdminLayout from 'src/layouts/AdminLayout/AdminLayout'
+import { Link, routes } from '@redwoodjs/router'
+
+const AdminViewUserPage = ({ id }) => {
+  const { client } = useAuth()
+
+  const { data: user, isLoading, isError, isSuccess, error, run } = useAsync()
+  useEffect(() => {
+    run(
+      authorizedFetch(client, '/.netlify/functions/userGet', {
+        method: 'POST',
+        body: JSON.stringify({ id }),
+      })
+    )
+  }, [client, id, run])
+  return (
+    <AdminLayout>
+      <Link to={routes.adminUsersPage()}>back to list</Link>
+      {isSuccess ? (
+        <>
+          <h3>{user.user_metadata.full_name}</h3>
+          <p>{user.email}</p>
+          <p>created: {user.created_at}</p>
+          <p>updated: {user.updated_at}</p>
+        </>
+      ) : null}
+      {isLoading ? <p>loading...</p> : null}
+      {isError ? <p>{error}</p> : null}
+    </AdminLayout>
+  )
+}
+
+export default AdminViewUserPage
+```
+update the routes file
+```tsx
+// src/Routes.js
+
+import { Router, Route, Private } from '@redwoodjs/router'
+
+const Routes = () => {
+  return (
+    <Router>
+      <Route path="/" page={HomePage} name="home" />
+      <Route path="/about" page={AboutPage} name="about" />
+      <Private unauthenticated="home">
+        <Route path="/private" page={PrivatePage} name="private" />
+      </Private>
+      <Private unauthenticated="home" role="admin">
+        <Route path="/admin/users/{id}/update" page={AdminUpdateUserPage} name="adminUpdateUser" />
+        <Route path="/admin/users/new" page={AdminNewUserPage} name="adminNewUser" />
+        <Route path="/admin/users/{id}" page={AdminViewUserPage} name="adminViewUser" />
+        <Route path="/admin/users" page={AdminUsersPage} name="adminUsers" />
+      </Private>
+      <Route notfound page={NotFoundPage} />
+    </Router>
+  )
+}
+
+export default Routes
+```
+
+
+
 
 
 

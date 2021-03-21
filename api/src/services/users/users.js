@@ -6,7 +6,7 @@ export const users = async () => {
 
   const adminToken = context.clientContext?.identity?.token
   const identityEndpoint = context.clientContext?.identity?.url
-  console.log({ adminToken }, { identityEndpoint })
+  // console.log({ adminToken }, { identityEndpoint })
   if (adminToken && identityEndpoint) {
     const { body } = await got.get(`${identityEndpoint}/admin/users`, {
       responseType: 'json',

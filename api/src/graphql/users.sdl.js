@@ -17,6 +17,26 @@ export const schema = gql`
     updated_at: DateTime!
   }
 
+  input CreateUserInput {
+    email: String!
+    password: String!
+    user_metadata: JSONObject
+    app_metadata: JSONObject
+  }
+  input UpdateUserInput {
+    id: String!
+    email: String!
+    password: String
+    roles: [String]
+    user_metadata: JSONObject
+    app_metadata: JSONObject
+  }
+  type Mutation {
+    createUser(input: CreateUserInput!): User!
+    updateUser(id: String!, input: UpdateUserInput!): User!
+    deleteUser(id: String!): User!
+  }
+
   type Query {
     users: [User!]!
     user(id: String!): User!

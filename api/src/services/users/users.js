@@ -1,29 +1,113 @@
 import got from 'got'
 import { requireAuth } from 'src/lib/auth'
 
-export const users = async () => {
+const getContextData = () => {
+  return {
+    adminToken: context.clientContext?.identity?.token,
+    identityEndpoint: context.clientContext?.identity?.url,
+  }
+}
+const getRequestOptions = (overrides) => {
+  const { adminToken } = getContextData()
+
+  return {
+    responseType: 'json',
+    headers: {
+      authorization: `Bearer ${adminToken}`,
+    },
+    ...overrides,
+  }
+}
+const userDummy = {
+  id: `${Date.now()}`,
+  email: 'example@example.com',
+  app_metadata: { roles: [] },
+  user_metadata: { full_name: 'Ariel Doe' },
+}
+
+export const deleteUser = async (id) => {
+  requireAuth({ role: 'admin' })
+  const { adminToken, identityEndpoint } = getContextData()
+  if (adminToken && identityEndpoint) {
+    const { body } = await got.get(
+      `${identityEndpoint}/admin/users/${id}`,
+      getRequestOptions({ method: 'DELETE' })
+    )
+
+    return body['user']
+  } else {
+    return userDummy
+  }
+}
+export const updateUser = async ({ input }) => {
+  requireAuth({ role: 'admin' })
+  const { adminToken, identityEndpoint } = getContextData()
+  if (adminToken && identityEndpoint) {
+    const { body } = await got.put(
+      `${identityEndpoint}/admin/users/${input.id}`,
+      getRequestOptions({
+        body: {
+          ...input,
+          user_metadata: { lastUpdatedBy: context.currentUser.email },
+        },
+      })
+    )
+
+    return body['user']
+  } else {
+    return userDummy
+  }
+}
+export const createUser = async ({ input }) => {
+  requireAuth({ role: 'admin' })
+  const { adminToken, identityEndpoint } = getContextData()
+  if (adminToken && identityEndpoint) {
+    const { body } = await got.post(
+      `${identityEndpoint}/admin/users`,
+      getRequestOptions({
+        body: {
+          ...input,
+          confirm: true,
+          user_metadata: {
+            createdBy: context.currentUser.email,
+            lastUpdatedBy: context.currentUser.email,
+          },
+        },
+      })
+    )
+
+    return body['user']
+  } else {
+    return userDummy
+  }
+}
+export const user = async (id) => {
   requireAuth({ role: 'admin' })
 
-  const adminToken = context.clientContext?.identity?.token
-  const identityEndpoint = context.clientContext?.identity?.url
-  // console.log({ adminToken }, { identityEndpoint })
+  const { adminToken, identityEndpoint } = getContextData()
   if (adminToken && identityEndpoint) {
-    const { body } = await got.get(`${identityEndpoint}/admin/users`, {
-      responseType: 'json',
-      headers: {
-        authorization: `Bearer ${adminToken}`,
-      },
-    })
+    const { body } = await got.get(
+      `${identityEndpoint}/admin/users/${id}`,
+      getRequestOptions()
+    )
+
+    return body['user']
+  } else {
+    return userDummy
+  }
+}
+export const users = async () => {
+  requireAuth({ role: 'admin' })
+  const { adminToken, identityEndpoint } = getContextData()
+
+  if (adminToken && identityEndpoint) {
+    const { body } = await got.get(
+      `${identityEndpoint}/admin/users`,
+      getRequestOptions()
+    )
 
     return body['users']
   } else {
-    const user = {
-      id: `${Date.now()}`,
-      email: 'example@example.com',
-      app_metadata: { roles: [] },
-      user_metadata: { full_name: 'Xavier Example' },
-    }
-
-    return [user, user, user]
+    return [userDummy, userDummy, userDummy]
   }
 }

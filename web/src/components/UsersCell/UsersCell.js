@@ -1,5 +1,14 @@
-import { Link, routes } from '@redwoodjs/router'
+import { Link, routes, navigate } from '@redwoodjs/router'
+import { useMutation } from '@redwoodjs/web'
+import { toast } from '@redwoodjs/web/toast'
 
+const DELETE_USER = gql`
+  mutation DeleteUserMutation($id: String!) {
+    deleteUser(id: $id) {
+      id
+    }
+  }
+`
 export const QUERY = gql`
   query UsersQuery {
     users {
@@ -22,6 +31,20 @@ export const Empty = () => <div>Empty</div>
 export const Failure = ({ error }) => <div>Error: {error.message}</div>
 
 export const Success = ({ users }) => {
+  const [deleteUser, { error }] = useMutation(DELETE_USER, {
+    onCompleted: () => {
+      navigate(routes.adminUsers())
+      toast.success('User successfuly deleted')
+    },
+    onError: () => {
+      toast.error(`the user could not be deleted: ${error}`)
+    },
+  })
+  const onDelete = (user) => {
+    if (confirm(`Are you sure you want to delete ${user.email}?`)) {
+      deleteUser({ variables: { id: user.id } })
+    }
+  }
   return (
     <ul>
       {users?.map((user) => (
@@ -35,20 +58,25 @@ export const Success = ({ users }) => {
             ? user.app_metadata.roles.map((role) => (
                 // inline styles to be removed
                 <span key={role} style={{ marginRight: '1rem' }}>
-                  {' '}
-                  {role}{' '}
+                  {role}
                 </span>
               ))
             : null}
           {/* // inline styles to be removed */}
           <Link
-            to={routes.adminViewUser({ id: user.id })}
+            to={routes.adminUserView({ id: user.id })}
             style={{ marginRight: '1rem' }}
           >
-            {' '}
-            view{' '}
+            view
           </Link>
-          <Link to={routes.adminUpdateUser({ id: user.id })}> edit </Link>
+          {/* // inline styles to be removed */}
+          <Link
+            to={routes.adminUserUpdate({ id: user.id })}
+            style={{ marginRight: '1rem' }}
+          >
+            edit
+          </Link>
+          <button onClick={() => onDelete(user)}>Delete</button>
         </li>
       ))}
     </ul>

@@ -46,10 +46,10 @@ export const updateUser = async ({ input }) => {
     const { body } = await got.put(
       `${identityEndpoint}/admin/users/${input.id}`,
       getRequestOptions({
-        body: {
+        body: JSON.stringify({
           ...input,
           user_metadata: { lastUpdatedBy: context.currentUser.email },
-        },
+        }),
       })
     )
 
@@ -65,14 +65,14 @@ export const createUser = async ({ input }) => {
     const { body } = await got.post(
       `${identityEndpoint}/admin/users`,
       getRequestOptions({
-        body: {
+        body: JSON.stringify({
           ...input,
           confirm: true,
           user_metadata: {
             createdBy: context.currentUser.email,
             lastUpdatedBy: context.currentUser.email,
           },
-        },
+        }),
       })
     )
 

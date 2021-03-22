@@ -5,7 +5,7 @@ import UsersCell from 'src/components/UsersCell/UsersCell'
 const AdminUsersPage = () => {
   return (
     <AdminLayout>
-      <Link to={routes.adminNewUser()}>Create new user</Link>
+      <Link to={routes.adminUserNew()}>Create new user</Link>
       <UsersCell />
     </AdminLayout>
   )

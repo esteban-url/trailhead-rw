@@ -1,6 +1,4 @@
-import { useEffect, useState } from 'react'
-import { useAsync, authorizedFetch } from 'src/utils/authorizedFetch'
-import { useAuth } from '@redwoodjs/auth'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import {
   CheckboxField,
@@ -10,14 +8,9 @@ import {
   Submit,
   TextField,
 } from '@redwoodjs/forms/dist'
-import { toast } from '@redwoodjs/web/toast'
 import FormField from 'src/components/FormField/FormField'
-import { navigate, routes } from '@redwoodjs/router'
 
 const UserForm = ({ user, onSave, error, loading }) => {
-  // const { client } = useAuth()
-
-  // const { isSuccess, isError, error, run } = useAsync()
   const [resetPassword, setResetPassword] = useState()
   const { register } = useForm({
     defaultValues: user
@@ -29,15 +22,6 @@ const UserForm = ({ user, onSave, error, loading }) => {
         }
       : {},
   })
-  // useEffect(() => {
-  //   if (isError) {
-  //     toast.error('The user could not be saved')
-  //   }
-  //   if (isSuccess) {
-  //     toast.success('User saved!')
-  //     navigate(routes.adminUsers())
-  //   }
-  // }, [error, isSuccess, isError])
 
   const onSubmit = (data) => {
     let roles = []
@@ -51,19 +35,6 @@ const UserForm = ({ user, onSave, error, loading }) => {
       app_metadata: { roles: roles },
     }
     onSave(updatedUser)
-
-    // run(
-    //   authorizedFetch(
-    //     client,
-    //     user?.id
-    //       ? '/.netlify/functions/userUpdate'
-    //       : '/.netlify/functions/userCreate',
-    //     {
-    //       method: 'POST',
-    //       body: JSON.stringify(updatedUser),
-    //     }
-    //   )
-    // )
   }
 
   return (

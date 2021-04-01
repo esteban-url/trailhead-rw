@@ -1,5 +1,6 @@
 import got from 'got'
 import { requireAuth } from 'src/lib/auth'
+import { logger } from 'src/lib/logger'
 
 const getContextData = () => {
   return {
@@ -100,6 +101,7 @@ export const users = async () => {
   requireAuth({ role: 'admin' })
   const { adminToken, identityEndpoint } = getContextData()
 
+  logger.trace({ adminToken }, { identityEndpoint })
   if (adminToken && identityEndpoint) {
     const { body } = await got.get(
       `${identityEndpoint}/admin/users`,

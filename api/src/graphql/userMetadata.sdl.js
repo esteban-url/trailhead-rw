@@ -1,6 +1,6 @@
 export const schema = gql`
   type UserMetadata {
-    full_name: String!
+    full_name: String
   }
 
   type Query {

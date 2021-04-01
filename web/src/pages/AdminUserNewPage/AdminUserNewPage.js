@@ -25,11 +25,11 @@ const AdminUserNewPage = () => {
     createUser({ variables: { input: user } })
   }
   return (
-    <AdminLayout>
+    <>
       <Link to={routes.adminUsers()}>Back to users</Link>
       <h2>Create new User</h2>
       <UserForm onSave={onCreate} />
-    </AdminLayout>
+    </>
   )
 }
 

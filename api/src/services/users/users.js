@@ -25,17 +25,35 @@ const userDummy = {
   app_metadata: { roles: [] },
   user_metadata: { full_name: 'Ariel Doe' },
 }
+const logError = (title, url, error) => {
+  console.error(title, url, error.response?.body, {
+    error,
+  })
+  logger.error(
+    {
+      url: url,
+      errorBody: error.response?.body,
+      error,
+    },
+    title
+  )
+}
 
-export const deleteUser = async (id) => {
+export const deleteUser = async ({ id }) => {
   requireAuth({ role: 'admin' })
   const { adminToken, identityEndpoint } = getContextData()
+  const url = `${identityEndpoint}/admin/users/${id}`
   if (adminToken && identityEndpoint) {
-    const { body } = await got.get(
-      `${identityEndpoint}/admin/users/${id}`,
-      getRequestOptions({ method: 'DELETE' })
-    )
+    try {
+      const { body } = await got.get(
+        url,
+        getRequestOptions({ method: 'DELETE' })
+      )
 
-    return body['user']
+      return body['user']
+    } catch (error) {
+      logError(`Identity: Failed to delete user`, url, error)
+    }
   } else {
     return userDummy
   }
@@ -43,56 +61,72 @@ export const deleteUser = async (id) => {
 export const updateUser = async ({ input }) => {
   requireAuth({ role: 'admin' })
   const { adminToken, identityEndpoint } = getContextData()
+  const url = `${identityEndpoint}/admin/users/${input.id}`
   if (adminToken && identityEndpoint) {
-    const { body } = await got.put(
-      `${identityEndpoint}/admin/users/${input.id}`,
-      getRequestOptions({
-        body: JSON.stringify({
-          ...input,
-          user_metadata: { lastUpdatedBy: context.currentUser.email },
-        }),
-      })
-    )
+    try {
+      const { body } = await got.put(
+        url,
+        getRequestOptions({
+          body: JSON.stringify({
+            ...input,
+            user_metadata: { lastUpdatedBy: context.currentUser.email },
+          }),
+        })
+      )
 
-    return body['user']
+      return body['user']
+    } catch (error) {
+      logError(`Identity: Failed to update user`, url, error)
+    }
   } else {
     return userDummy
   }
 }
 export const createUser = async ({ input }) => {
   requireAuth({ role: 'admin' })
-  const { adminToken, identityEndpoint } = getContextData()
-  if (adminToken && identityEndpoint) {
-    const { body } = await got.post(
-      `${identityEndpoint}/admin/users`,
-      getRequestOptions({
-        body: JSON.stringify({
-          ...input,
-          confirm: true,
-          user_metadata: {
-            createdBy: context.currentUser.email,
-            lastUpdatedBy: context.currentUser.email,
-          },
-        }),
-      })
-    )
 
-    return body['user']
+  const { adminToken, identityEndpoint } = getContextData()
+  const url = `${identityEndpoint}/admin/users`
+  if (adminToken && identityEndpoint) {
+    try {
+      const { body } = await got.post(
+        url,
+        getRequestOptions({
+          body: JSON.stringify({
+            ...input,
+            confirm: true,
+            app_metadata: {
+              roles: ['user'],
+            },
+            user_metadata: {
+              createdBy: context.currentUser.email,
+              lastUpdatedBy: context.currentUser.email,
+            },
+          }),
+        })
+      )
+
+      return body['user']
+    } catch (error) {
+      logError(`Identity: Failed to create user`, url, error)
+    }
   } else {
     return userDummy
   }
 }
-export const user = async (id) => {
+export const user = async ({ id }) => {
   requireAuth({ role: 'admin' })
 
   const { adminToken, identityEndpoint } = getContextData()
-  if (adminToken && identityEndpoint) {
-    const { body } = await got.get(
-      `${identityEndpoint}/admin/users/${id}`,
-      getRequestOptions()
-    )
+  const url = `${identityEndpoint}/admin/users/${id}`
 
-    return body['user']
+  if (adminToken && identityEndpoint) {
+    try {
+      const { body } = await got.get(url, getRequestOptions())
+      return body['user']
+    } catch (error) {
+      logError(`Identity: Failed to get single user`, url, error)
+    }
   } else {
     return userDummy
   }
@@ -100,15 +134,14 @@ export const user = async (id) => {
 export const users = async () => {
   requireAuth({ role: 'admin' })
   const { adminToken, identityEndpoint } = getContextData()
-
-  logger.trace({ adminToken }, { identityEndpoint })
+  const url = `${identityEndpoint}/admin/users`
   if (adminToken && identityEndpoint) {
-    const { body } = await got.get(
-      `${identityEndpoint}/admin/users`,
-      getRequestOptions()
-    )
-
-    return body['users']
+    try {
+      const { body } = await got.get(url, getRequestOptions())
+      return body['users']
+    } catch (error) {
+      logError(`Identity: Failed to get users list`, url, error)
+    }
   } else {
     return [userDummy, userDummy, userDummy]
   }

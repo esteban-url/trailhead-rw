@@ -26,23 +26,11 @@ const userDummy = {
   user_metadata: { full_name: 'Ariel Doe' },
 }
 const logError = (title, url, error) => {
-  // console.error(title, url, error.response?.body, {
-  //   error,
-  // })
   logger.error(
     {
       url: url,
       errorBody: error.response?.body,
       error,
-    },
-    title
-  )
-}
-const logTrace = (title, url, data) => {
-  logger.warn(
-    {
-      url: url,
-      data,
     },
     title
   )
@@ -58,7 +46,6 @@ export const deleteUser = async ({ id }) => {
         url,
         getRequestOptions({ method: 'DELETE' })
       )
-      logTrace('deleting user', url, { body })
       return body
     } catch (error) {
       logError(`Identity: Failed to delete user`, url, error)
@@ -82,7 +69,6 @@ export const updateUser = async ({ input }) => {
           }),
         })
       )
-      logTrace('updating user', url, { body })
       return body
     } catch (error) {
       logError(`Identity: Failed to update user`, url, error)
@@ -108,14 +94,13 @@ export const createUser = async ({ input }) => {
               roles: ['user'],
             },
             user_metadata: {
+              ...input.user_metadata,
               createdBy: context.currentUser.email,
               lastUpdatedBy: context.currentUser.email,
             },
           }),
         })
       )
-      logTrace('creating user', url, { body })
-
       return body
     } catch (error) {
       logError(`Identity: Failed to create user`, url, error)
@@ -133,7 +118,6 @@ export const user = async ({ id }) => {
   if (adminToken && identityEndpoint) {
     try {
       const { body } = await got.get(url, getRequestOptions())
-      logTrace('getting user', url, { body })
       return body
     } catch (error) {
       logError(`Identity: Failed to get single user`, url, error)
@@ -149,7 +133,6 @@ export const users = async () => {
   if (adminToken && identityEndpoint) {
     try {
       const { body } = await got.get(url, getRequestOptions())
-      logTrace('listing users', url, { body })
       return body['users']
     } catch (error) {
       logError(`Identity: Failed to get users list`, url, error)

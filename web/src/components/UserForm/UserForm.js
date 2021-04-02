@@ -91,8 +91,8 @@ const UserForm = ({ user, onSave, error, loading }) => {
         </div>
       ) : null}
       {error ? <span>{error.message}</span> : null}
-      {loading ? <span>{error.message}</span> : null}
-      <Submit>Save User</Submit>
+      {loading ? <span>loading</span> : null}
+      <Submit enabled={!loading}>Save User</Submit>
     </Form>
   )
 }

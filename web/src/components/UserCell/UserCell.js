@@ -33,21 +33,20 @@ export const Empty = () => <div>Empty</div>
 export const Failure = ({ error }) => <div>Error: {error.message}</div>
 
 export const Success = ({ user, update = false }) => {
-  const [createUser, { error }] = useMutation(UPDATE_USER, {
+  const [createUser, { error, loading }] = useMutation(UPDATE_USER, {
     onCompleted: () => {
       navigate(routes.adminUsers())
       toast.success('User successfuly updated')
     },
     onError: () => {
-      toast.error(`the user could not be updated: ${error}`)
+      toast.error(`the user could not be updated.`)
     },
   })
   const onSave = (user) => {
-    console.log(user)
     createUser({ variables: { id: user.id, input: user } })
   }
   return update ? (
-    <UserForm user={user} onSave={onSave} />
+    <UserForm user={user} onSave={onSave} error={error} loading={loading} />
   ) : (
     <>
       <h3>{user.user_metadata.full_name}</h3>

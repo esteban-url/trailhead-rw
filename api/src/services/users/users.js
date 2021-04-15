@@ -103,8 +103,8 @@ export const createUser = async ({ input }) => {
             },
             user_metadata: {
               ...input.user_metadata,
-              createdBy: context.currentUser.email,
-              lastUpdatedBy: context.currentUser.email,
+              created_by: context.currentUser.email,
+              lastUpdated_by: context.currentUser.email,
             },
           }),
         })

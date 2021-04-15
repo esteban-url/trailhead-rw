@@ -1,6 +1,8 @@
 export const schema = gql`
   type AppMetadata {
     roles: [String]
+    created_by: String
+    lastUpdated_by: String
   }
 
   type User {

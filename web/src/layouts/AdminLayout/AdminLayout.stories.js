@@ -1,6 +1,10 @@
 import AdminLayout from './AdminLayout'
 
-export const generated = () => {
+export const admin = () => {
+  mockCurrentUser({
+    user_metadata: { full_name: 'Esteban' },
+    roles: ['admin'],
+  })
   return <AdminLayout />
 }
 

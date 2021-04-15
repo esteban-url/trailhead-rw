@@ -13,7 +13,11 @@ export const QUERY = gql`
       }
       app_metadata {
         roles
+        created_by
+        lastUpdated_by
       }
+      created_at
+      updated_at
     }
   }
 `
@@ -50,9 +54,13 @@ export const Success = ({ user, update = false }) => {
   ) : (
     <>
       <h3>{user.user_metadata.full_name}</h3>
-      <p>{user.email}</p>
-      <p>created: {user.created_at}</p>
-      <p>updated: {user.updated_at}</p>
+      <p>Email: {user.email}</p>
+      <p>Created: {user?.created_at?.toISOString()}</p>
+      <p>Updated: {user?.updated_at?.toISOString()}</p>
+      <p>Created by: {user.app_metadata?.created_by}</p>
+      <p>Last Updated by: {user.app_metadata?.lastUpdated_by}</p>
+      <p>Confirmed at: {user.confirmated_at?.toISOString()}</p>
+      <p>Confirmation sent at: {user.confirmation_sent_at?.toISOString()}</p>
     </>
   )
 }

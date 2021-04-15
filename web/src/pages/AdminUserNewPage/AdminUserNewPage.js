@@ -2,6 +2,7 @@ import { Link, navigate, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import toast from 'react-hot-toast'
 import UserForm from 'src/components/UserForm/UserForm'
+
 const CREATE_USER = gql`
   mutation CreateUserMutation($input: CreateUserInput!) {
     createUser(input: $input) {

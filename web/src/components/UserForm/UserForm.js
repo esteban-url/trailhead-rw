@@ -23,7 +23,7 @@ const UserForm = ({ user, onSave, error, loading }) => {
       : {},
   })
 
-  const onSubmit = (data) => {
+  const handleSubmit = (data) => {
     let roles = []
     if (data.admin) roles = [...roles, 'admin']
     if (data.other) roles = [...roles, 'other']
@@ -38,7 +38,7 @@ const UserForm = ({ user, onSave, error, loading }) => {
   }
 
   return (
-    <Form onSubmit={onSubmit}>
+    <Form onSubmit={handleSubmit}>
       <FormField
         as={TextField}
         name="name"
@@ -92,7 +92,7 @@ const UserForm = ({ user, onSave, error, loading }) => {
       ) : null}
       {error ? <span>{error.message}</span> : null}
       {loading ? <span>loading</span> : null}
-      <Submit enabled={!loading}>Save User</Submit>
+      <Submit disabled={loading}>Save User</Submit>
     </Form>
   )
 }

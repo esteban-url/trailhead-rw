@@ -4,9 +4,7 @@ import { toast } from '@redwoodjs/web/toast'
 
 const DELETE_USER = gql`
   mutation DeleteUserMutation($id: String!) {
-    deleteUser(id: $id) {
-      id
-    }
+    deleteUser(id: $id)
   }
 `
 export const QUERY = gql`

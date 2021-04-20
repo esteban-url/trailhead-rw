@@ -2,6 +2,13 @@ import got from 'got'
 import { requireAuth } from 'src/lib/auth'
 import { logger } from 'src/lib/logger'
 
+const mockedUser = {
+  id: `${Date.now()}`,
+  email: 'example@example.com',
+  app_metadata: { roles: [] },
+  user_metadata: { full_name: 'Ariel Doe' },
+}
+
 const getContextData = () => {
   return {
     adminToken: context.clientContext?.identity?.token,
@@ -19,13 +26,6 @@ const getRequestOptions = (overrides) => {
     },
     ...overrides,
   }
-}
-
-const userDummy = {
-  id: `${Date.now()}`,
-  email: 'example@example.com',
-  app_metadata: { roles: [] },
-  user_metadata: { full_name: 'Ariel Doe' },
 }
 
 const logError = (title, url, error) => {
@@ -46,14 +46,11 @@ export const deleteUser = async ({ id }) => {
 
   if (adminToken && identityEndpoint) {
     try {
-      const { body } = await got.delete(url, getRequestOptions())
-      return body
+      await got.delete(url, getRequestOptions())
     } catch (error) {
       logError(`Identity: Failed to delete user`, url, error)
       throw new Error(error.response?.body.msg || "Can't delete the user")
     }
-  } else {
-    return userDummy
   }
 }
 
@@ -80,7 +77,7 @@ export const updateUser = async ({ input }) => {
       throw new Error(error.response?.body.msg || "Can't update the user")
     }
   } else {
-    return userDummy
+    return mockedUser
   }
 }
 
@@ -115,7 +112,7 @@ export const createUser = async ({ input }) => {
       throw new Error(error.response?.body.msg || "Can't create the new user")
     }
   } else {
-    return userDummy
+    return mockedUser
   }
 }
 
@@ -134,7 +131,7 @@ export const user = async ({ id }) => {
       throw new Error(error.response?.body.msg || "Can't get the user")
     }
   } else {
-    return userDummy
+    return mockedUser
   }
 }
 
@@ -153,6 +150,6 @@ export const users = async () => {
       throw new Error(error.response?.body.msg || "Can't get the users list")
     }
   } else {
-    return [userDummy, userDummy, userDummy]
+    return [mockedUser, mockedUser, mockedUser]
   }
 }

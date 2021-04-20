@@ -55,12 +55,12 @@ export const Success = ({ user, update = false }) => {
     <>
       <h3>{user.user_metadata.full_name}</h3>
       <p>Email: {user.email}</p>
-      <p>Created: {user?.created_at?.toISOString()}</p>
-      <p>Updated: {user?.updated_at?.toISOString()}</p>
+      <p>Created: {user?.created_at}</p>
+      <p>Updated: {user?.updated_at}</p>
       <p>Created by: {user.app_metadata?.created_by}</p>
       <p>Last Updated by: {user.app_metadata?.lastUpdated_by}</p>
-      <p>Confirmed at: {user.confirmated_at?.toISOString()}</p>
-      <p>Confirmation sent at: {user.confirmation_sent_at?.toISOString()}</p>
+      <p>Confirmed at: {user.confirmated_at}</p>
+      <p>Confirmation sent at: {user.confirmation_sent_at}</p>
     </>
   )
 }

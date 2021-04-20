@@ -1,11 +1,11 @@
 import { render } from '@redwoodjs/testing'
 
-import AdminViewUserPage from './AdminViewUserPage'
+import AdminUserNewPage from './AdminUserNewPage'
 
-describe('AdminViewUserPage', () => {
+describe('AdminUserNewPage', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<AdminViewUserPage />)
+      render(<AdminUserNewPage />)
     }).not.toThrow()
   })
 })

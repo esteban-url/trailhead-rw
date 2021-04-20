@@ -1,6 +1,4 @@
-import { useEffect, useState } from 'react'
-import { useAsync, authorizedFetch } from 'src/utils/authorizedFetch'
-import { useAuth } from '@redwoodjs/auth'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import {
   CheckboxField,
@@ -10,14 +8,9 @@ import {
   Submit,
   TextField,
 } from '@redwoodjs/forms/dist'
-import { toast } from '@redwoodjs/web/toast'
 import FormField from 'src/components/FormField/FormField'
-import { navigate, routes } from '@redwoodjs/router'
 
-const UserForm = ({ user }) => {
-  const { client } = useAuth()
-
-  const { isSuccess, isError, error, run } = useAsync()
+const UserForm = ({ user, onSave, error, loading }) => {
   const [resetPassword, setResetPassword] = useState()
   const { register } = useForm({
     defaultValues: user
@@ -29,17 +22,8 @@ const UserForm = ({ user }) => {
         }
       : {},
   })
-  useEffect(() => {
-    if (isError) {
-      toast.error('The user could not be saved')
-    }
-    if (isSuccess) {
-      toast.success('User saved!')
-      navigate(routes.adminUsers())
-    }
-  }, [error, isSuccess, isError])
 
-  const onSubmit = (data) => {
+  const handleSubmit = (data) => {
     let roles = []
     if (data.admin) roles = [...roles, 'admin']
     if (data.other) roles = [...roles, 'other']
@@ -50,23 +34,11 @@ const UserForm = ({ user }) => {
       user_metadata: { full_name: data.name },
       app_metadata: { roles: roles },
     }
-
-    run(
-      authorizedFetch(
-        client,
-        user?.id
-          ? '/.netlify/functions/userUpdate'
-          : '/.netlify/functions/userCreate',
-        {
-          method: 'POST',
-          body: JSON.stringify(updatedUser),
-        }
-      )
-    )
+    onSave(updatedUser)
   }
 
   return (
-    <Form onSubmit={onSubmit}>
+    <Form onSubmit={handleSubmit}>
       <FormField
         as={TextField}
         name="name"
@@ -118,8 +90,9 @@ const UserForm = ({ user }) => {
           />
         </div>
       ) : null}
-      {isError ? <div>{error.message}</div> : null}
-      <Submit>Save User</Submit>
+      {error ? <span>{error.message}</span> : null}
+      {loading ? <span>loading</span> : null}
+      <Submit disabled={loading}>Save User</Submit>
     </Form>
   )
 }

@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "@redwoodjs/api": "^0.27.0"
+    "@redwoodjs/api": "^0.29.0",
+    "@redwoodjs/api-server": "^0.29.0",
+    "got": "^11.8.2",
+    "pino-logflare": "^0.3.8"
   }
 }

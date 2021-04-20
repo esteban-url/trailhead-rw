@@ -1,13 +1,8 @@
+// trailhead-rw
+
 import got from 'got'
 import { requireAuth } from 'src/lib/auth'
 import { logger } from 'src/lib/logger'
-
-const mockedUser = {
-  id: `${Date.now()}`,
-  email: 'example@example.com',
-  app_metadata: { roles: [] },
-  user_metadata: { full_name: 'Ariel Doe' },
-}
 
 const getContextData = () => {
   return {
@@ -77,7 +72,7 @@ export const updateUser = async ({ input }) => {
       throw new Error(error.response?.body.msg || "Can't update the user")
     }
   } else {
-    return mockedUser
+    return mockedUsers.find((x) => x.id === input.id)
   }
 }
 
@@ -112,7 +107,7 @@ export const createUser = async ({ input }) => {
       throw new Error(error.response?.body.msg || "Can't create the new user")
     }
   } else {
-    return mockedUser
+    return mockedUsers[Math.floor(Math.random() * mockedUsers.length)]
   }
 }
 
@@ -131,7 +126,7 @@ export const user = async ({ id }) => {
       throw new Error(error.response?.body.msg || "Can't get the user")
     }
   } else {
-    return mockedUser
+    return mockedUsers.find((x) => x.id === id)
   }
 }
 
@@ -150,6 +145,51 @@ export const users = async () => {
       throw new Error(error.response?.body.msg || "Can't get the users list")
     }
   } else {
-    return [mockedUser, mockedUser, mockedUser]
+    return mockedUsers
   }
 }
+
+const mockedUsers = [
+  {
+    id: 'd58c26d5-c3e4-4f4c-97af-a3838976e7f1',
+    email: 'regular@user.com',
+    user_metadata: { full_name: 'Regular user', __typename: 'UserMetadata' },
+    app_metadata: {
+      roles: ['user'],
+      created_by: 'esteban@fakemail.com',
+      lastUpdated_by: 'esteban@fakemail.com',
+      __typename: 'AppMetadata',
+    },
+    created_at: '2021-04-20T21:56:23.000Z',
+    updated_at: '2021-04-20T21:56:23.000Z',
+    __typename: 'User',
+  },
+  {
+    id: '793e9bb1-6ca2-44d2-8fc2-e135a88708c4',
+    email: 'test@admin.com',
+    user_metadata: { full_name: 'test admin', __typename: 'UserMetadata' },
+    app_metadata: {
+      roles: ['admin'],
+      created_by: null,
+      lastUpdated_by: null,
+      __typename: 'AppMetadata',
+    },
+    created_at: '2021-04-20T15:51:28.000Z',
+    updated_at: '2021-04-20T15:51:28.000Z',
+    __typename: 'User',
+  },
+  {
+    id: 'f7d63030-2233-4a7c-8568-3a9e28c9551b',
+    email: 'estebanjrojas@gmail.com',
+    user_metadata: { full_name: 'Esteban', __typename: 'UserMetadata' },
+    app_metadata: {
+      roles: ['admin'],
+      created_by: null,
+      lastUpdated_by: null,
+      __typename: 'AppMetadata',
+    },
+    created_at: '2020-10-10T01:12:42.000Z',
+    updated_at: '2020-10-10T01:12:42.000Z',
+    __typename: 'User',
+  },
+]

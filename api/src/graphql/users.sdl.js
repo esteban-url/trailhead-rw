@@ -4,6 +4,9 @@ export const schema = gql`
     created_by: String
     lastUpdated_by: String
   }
+  type UserMetadata {
+    full_name: String
+  }
 
   type User {
     id: String!

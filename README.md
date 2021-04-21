@@ -2,36 +2,71 @@
 
 Trailhead is a starter point for your app, based on top of [Redwoodjs](https://github.com/redwoodjs/redwood) , it adds common functionalities so you don't have to!
 
-- auth, provided by netlify identity
-- user management, provided via lambda functions
+- auth, provided by netlify identity. [docs](https://docs.netlify.com/visitor-access/identity/)
+- user management, provided via custom pages, component and services
+- Error Loggin
+
+
+
+There are two ways to use trailhead,
+
+## Getting started the *super easy way*
+
+[Click here](https://github.com/esteban-url/trailhead-rw/generate) to generate a new repository from the latesr version of trailhead.
 
 ## Step by step guide
-This on how I built trailhead.
-
-To be perfectly honest this is not how I actually build it. This is the "_clean_"  version.
-
-There was pain, blood and tears, way many commits, errors, re-tries, deploys to get everything working.
-
+If you are starting from scratch you can follow this steps:
 ### Create the app
 
 ```sh
-yarn create redwood-app trailhead-rw
+yarn create redwood-app app-name
 ```
 ```sh
-cd  trailhead-rw
+cd  app-name
 ```
 ### Setup the auth configuration
-Using netlify
 ```sh
 yarn rw setup auth netlify
 ```
-
+### Install got
+```sh
+yarn workspace api add got
+```
 ### Setup the deployment configuration
 Using netlify
 ```sh
 yarn rw setup deploy netlify
 ```
+### Components
 
+Copy all the folders and files from `web/src/components`
+### Layouts
+
+Copy all the folders and files from `web/src/layouts`
+
+### Pages
+
+Copy all the folders and files from `web/src/pages`
+### Edit routes
+
+
+This will add the pages to the router, the file is located at `web/src/routes.js`
+
+[Click here for the latest version](https://github.com/esteban-url/trailhead-rw/blob/main/web/src/Routes.js#L1-L500)
+### Services
+Copy all the folders and files from `api/src/services`
+
+### SDL
+Copy all the folders and files from `api/src/graphql`
+You are done! you can start the dev server now
+
+```sh
+yarn rw dev
+```
+
+## Deploying to netlify
+
+To deploy the app to netlify, I higly recommend configuring  your site for [continuous deployment](https://docs.netlify.com/configure-builds/get-started/) by connecting your site to a git repository. [click here to create a new site](https://app.netlify.com/start) and follow the steps there
 
 ---
 # Redwood

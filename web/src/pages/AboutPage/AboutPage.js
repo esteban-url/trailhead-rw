@@ -1,9 +1,10 @@
-import Header from 'src/components/Header/Header'
+import { PageTitle } from 'src/utils/PageTitle'
 
 const AboutPage = () => {
   return (
     <>
-      <Header title="About Trailhead"></Header>
+      <PageTitle>About Trailhead</PageTitle>
+      this is the about page
     </>
   )
 }

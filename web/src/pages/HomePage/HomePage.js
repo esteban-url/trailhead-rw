@@ -3,6 +3,7 @@ import {
   UserGroupIcon,
   SupportIcon,
 } from '@heroicons/react/outline'
+import { Helmet } from 'react-helmet-async'
 import Header from 'src/components/Header/Header'
 
 const features = [
@@ -68,9 +69,13 @@ const faqs = [
   },
 ]
 const HomePage = () => {
+  const pageTitle = 'Trailhead'
   return (
     <>
-      <Header title="Trailhead">
+      <Helmet>
+        <title>{pageTitle}</title>
+      </Helmet>
+      <Header title={pageTitle}>
         <p className="mt-6 max-w-3xl text-xl text-gray-300">
           A Redwoodjs boilerplate with user managment (Netlify Identity) support
           built in. <br />

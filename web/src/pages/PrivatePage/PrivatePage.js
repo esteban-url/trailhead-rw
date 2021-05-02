@@ -1,8 +1,10 @@
+import Header from 'src/components/Header/Header'
+
 const PrivatePage = () => {
   return (
     <>
-      <h1>Private Page</h1>
-      <p>this is for logged in trailhead users only</p>
+      <Header title="Private Page" />
+      <p>This page is for logged in trailhead users only</p>
     </>
   )
 }

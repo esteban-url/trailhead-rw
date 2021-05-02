@@ -1,15 +1,14 @@
-import Navigation from 'src/components/Navigation/Navigation'
 import { Toaster } from '@redwoodjs/web/toast'
+import Footer from 'src/components/Footer/Footer'
 
 const PublicLayout = ({ children }) => {
   return (
     <>
-      <Navigation />
-      <Toaster
-        position="top-right"
-        toastOptions={{ success: { duration: 3000 } }}
-      />
-      {children}
+      <div className="min-h-screen bg-white">
+        {children}
+        <Footer />
+      </div>
+      <Toaster position="top" toastOptions={{ success: { duration: 3000 } }} />
     </>
   )
 }

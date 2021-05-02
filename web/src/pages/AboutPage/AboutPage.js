@@ -1,7 +1,9 @@
+import Header from 'src/components/Header/Header'
+
 const AboutPage = () => {
   return (
     <>
-      <h1>About Trailhead</h1>
+      <Header title="About Trailhead"></Header>
     </>
   )
 }

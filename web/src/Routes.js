@@ -17,6 +17,8 @@ const Routes = () => {
     <Router>
       <HelmetProvider>
         <Route path="/" page={HomePage} name="home" />
+        <Route path="/login" page={HomePage} name="login" />
+        <Route path="/signup" page={HomePage} name="signup" />
         <Set wrap={[PageTitleProvider, PublicLayout]}>
           <Route path="/about" page={AboutPage} name="about" />
           <Private unauthenticated="home">

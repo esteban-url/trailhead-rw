@@ -3,6 +3,8 @@ import {
   UserGroupIcon,
   SupportIcon,
 } from '@heroicons/react/outline'
+import { useAuth } from '@redwoodjs/auth'
+import { useLocation } from '@redwoodjs/router'
 import { Helmet } from 'react-helmet-async'
 import Footer from 'src/components/Footer/Footer'
 import Header from 'src/components/Header/Header'
@@ -69,8 +71,24 @@ const faqs = [
       "He couldn't see himself doing it. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.",
   },
 ]
+
+const useAuthPages = () => {
+  const { pathname } = useLocation()
+  const { logIn, signUp } = useAuth()
+
+  React.useEffect(() => {
+    if (pathname === '/login') {
+      logIn()
+    }
+    if (pathname === '/signup') {
+      signUp()
+    }
+  }, [logIn, pathname, signUp])
+}
+
 const HomePage = () => {
   const pageTitle = 'Trailhead'
+  useAuthPages()
   return (
     <>
       <Helmet>

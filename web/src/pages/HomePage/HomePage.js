@@ -4,6 +4,7 @@ import {
   SupportIcon,
 } from '@heroicons/react/outline'
 import { Helmet } from 'react-helmet-async'
+import Footer from 'src/components/Footer/Footer'
 import Header from 'src/components/Header/Header'
 
 const features = [
@@ -273,6 +274,7 @@ const HomePage = () => {
           </div>
         </section>
       </main>
+      <Footer />
     </>
   )
 }

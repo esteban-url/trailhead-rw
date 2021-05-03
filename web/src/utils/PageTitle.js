@@ -1,10 +1,13 @@
 import { createContext, useContext, useState, useEffect } from 'react'
+import { Helmet } from 'react-helmet-async'
 
 const PageTitleContext = createContext()
 const usePageTitle = () => {
   const context = useContext(PageTitleContext)
   if (!context)
-    throw new Error('usePageTitleCache must be within the PageTitleProvider')
+    throw new Error(
+      'usePageTitleCache must be used within the PageTitleProvider'
+    )
   return context
 }
 
@@ -22,6 +25,10 @@ const PageTitle = ({ children }) => {
   useEffect(() => {
     setPageTitle(children)
   }, [setPageTitle, children])
-  return null
+  return (
+    <Helmet>
+      <title>{children}</title>
+    </Helmet>
+  )
 }
 export { usePageTitle, PageTitleProvider, PageTitle }

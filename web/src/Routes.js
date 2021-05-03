@@ -25,7 +25,7 @@ const Routes = () => {
             <Route path="/private" page={PrivatePage} name="private" />
           </Private>
         </Set>
-        <Set wrap={AdminLayout}>
+        <Set wrap={[PageTitleProvider, AdminLayout]}>
           <Private unauthenticated="home" role="admin">
             <Route path="/admin/users/{id}/update" page={AdminUserUpdatePage} name="adminUserUpdate" />
             <Route path="/admin/users/new" page={AdminUserNewPage} name="adminUserNew" />

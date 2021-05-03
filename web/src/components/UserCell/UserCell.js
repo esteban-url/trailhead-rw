@@ -1,6 +1,7 @@
 import { navigate, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import toast from 'react-hot-toast'
+import { PageTitle } from 'src/utils/PageTitle'
 import UserForm from '../UserForm/UserForm'
 
 export const QUERY = gql`
@@ -53,6 +54,7 @@ export const Success = ({ user, update = false }) => {
     <UserForm user={user} onSave={onSave} error={error} loading={loading} />
   ) : (
     <>
+      <PageTitle>{user.user_metadata.full_name}</PageTitle>
       <h3>{user.user_metadata.full_name}</h3>
       <p>Email: {user.email}</p>
       <p>Created: {user?.created_at}</p>

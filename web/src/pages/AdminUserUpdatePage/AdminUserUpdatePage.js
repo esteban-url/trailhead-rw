@@ -1,10 +1,10 @@
-import { Link, routes } from '@redwoodjs/router'
 import UserCell from 'src/components/UserCell/UserCell'
+import { PageTitle } from 'src/utils/PageTitle'
 
 const AdminUserUpdatePage = ({ id }) => {
   return (
     <>
-      <Link to={routes.adminUsers()}>Back to users</Link>
+      <PageTitle>Update user</PageTitle>
       <UserCell id={id} update={true} />
     </>
   )

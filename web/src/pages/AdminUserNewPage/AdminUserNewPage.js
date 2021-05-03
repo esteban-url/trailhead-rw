@@ -1,7 +1,8 @@
-import { Link, navigate, routes } from '@redwoodjs/router'
+import { navigate, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import toast from 'react-hot-toast'
 import UserForm from 'src/components/UserForm/UserForm'
+import { PageTitle } from 'src/utils/PageTitle'
 
 const CREATE_USER = gql`
   mutation CreateUserMutation($input: CreateUserInput!) {
@@ -25,8 +26,8 @@ const AdminUserNewPage = () => {
   }
   return (
     <>
-      <Link to={routes.adminUsers()}>Back to users</Link>
-      <h2>Create new User</h2>
+      <PageTitle>New user</PageTitle>
+
       <UserForm onSave={onCreate} error={error} loading={loading} />
     </>
   )

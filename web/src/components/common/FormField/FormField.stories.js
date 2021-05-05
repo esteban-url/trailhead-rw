@@ -16,4 +16,4 @@ export const checkbox = () => {
   )
 }
 
-export default { title: 'Components/FormField' }
+export default { title: 'Components/common/FormField' }

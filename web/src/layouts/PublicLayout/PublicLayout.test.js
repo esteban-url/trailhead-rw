@@ -1,5 +1,4 @@
-import { render } from '@redwoodjs/testing'
-
+import { render } from 'src/utils/testing'
 import PublicLayout from './PublicLayout'
 
 describe('PublicLayout', () => {

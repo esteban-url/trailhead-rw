@@ -8,9 +8,9 @@ describe('Navigation', () => {
       render(<Navigation />)
     }).not.toThrow()
   })
-  it('renders login button wehn not logged in', () => {
+  it('renders login button when not logged in', () => {
     render(<Navigation />)
-    expect(screen.getByRole('button', { name: 'Log in' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument()
   })
   it('does not render a login button when logged in', async () => {
     mockCurrentUser({ name: 'Rob' })
@@ -23,12 +23,12 @@ describe('Navigation', () => {
       ).not.toBeInTheDocument()
     })
   })
-  it('renders a welcome message when logged in', async () => {
+  it('renders the users name when logged in', async () => {
     mockCurrentUser({ user_metadata: { full_name: 'Esteban' } })
 
     render(<Navigation />)
 
-    expect(await screen.findByText('Welcome, Esteban')).toBeInTheDocument()
+    expect(await screen.findByText('Esteban')).toBeInTheDocument()
   })
   it('renders admin navitem when logged in with admin role', async () => {
     mockCurrentUser({

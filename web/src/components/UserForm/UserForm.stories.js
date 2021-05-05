@@ -1,12 +1,15 @@
 import UserForm from './UserForm'
-import { user, loading, userWithErrorSaving } from './UserForm.mock'
+import { user, adminUser, loading, userWithErrorSaving } from './UserForm.mock'
 
 export const newUser = () => {
-  return <UserForm />
+  return <UserForm onSave={console.log} />
 }
 
 export const editingAUser = () => {
-  return <UserForm {...user()} />
+  return <UserForm {...user()} onSave={console.log} />
+}
+export const editingAnAdminUser = () => {
+  return <UserForm {...adminUser()} onSave={console.log} />
 }
 
 export const error = () => {

@@ -51,7 +51,9 @@ const AdminLayout = ({ children }) => {
                   ))}
                 </nav>
               </aside>
-              {children}
+              <div className="divide-y divide-gray-200 lg:col-span-9">
+                <div className="py-6 px-6 sm:p-6 lg:pb-8">{children}</div>
+              </div>
             </div>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { render } from '@redwoodjs/testing'
+import { render } from 'src/utils/testing'
 
 import AdminLayout from './AdminLayout'
 

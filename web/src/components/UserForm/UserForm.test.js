@@ -8,6 +8,7 @@ describe('UserForm', () => {
       render(<UserForm />)
     }).not.toThrow()
   })
+
   it('renders user correctly', () => {
     render(<UserForm {...user()} />)
     expect(screen.getByRole('textbox', { name: /email/i })).toHaveValue(
@@ -23,11 +24,13 @@ describe('UserForm', () => {
       screen.getByRole('button', { name: /save user/i })
     ).toBeInTheDocument()
   })
+
   it('password is initially hidden when editing user', () => {
     render(<UserForm {...user()} />)
 
     expect(screen.queryByLabelText(/password/i)).not.toBeInTheDocument()
   })
+
   it('shows password field when reseting password', () => {
     render(<UserForm {...user()} />)
 
@@ -41,6 +44,7 @@ describe('UserForm', () => {
 
     expect(screen.getByLabelText(/password/i)).toBeInTheDocument()
   })
+
   it('shows error when name is empty', async () => {
     render(<UserForm />)
 
@@ -54,6 +58,7 @@ describe('UserForm', () => {
 
     expect(screen.queryByText(/name is required/i)).toBeInTheDocument()
   })
+
   it('shows error when email is empty', async () => {
     render(<UserForm />)
 
@@ -67,6 +72,7 @@ describe('UserForm', () => {
 
     expect(screen.queryByText(/email is required/i)).toBeInTheDocument()
   })
+
   it('shows error when password is empty', async () => {
     render(<UserForm />)
 

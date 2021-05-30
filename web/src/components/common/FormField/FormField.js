@@ -20,7 +20,9 @@ const FormField = ({
         {label}
       </Label>
       <div className="mt-1">
-        {children ?? (
+        {children ? (
+          children
+        ) : (
           <>
             <As
               name={name}

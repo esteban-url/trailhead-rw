@@ -1,6 +1,7 @@
 import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
+import UsersList from '../UsersList/UsersList'
 
 const DELETE_USER = gql`
   mutation DeleteUserMutation($id: String!) {
@@ -51,40 +52,7 @@ export const Success = ({ users }) => {
   return (
     <>
       {error ? <div>{error}</div> : null}
-      <ul>
-        {users?.map((user) => (
-          <li key={user.email}>
-            {/* // inline styles to be removed */}
-            <span style={{ marginRight: '1rem' }}>
-              {user.user_metadata.full_name} - {user.email}
-            </span>
-
-            {user.app_metadata?.roles
-              ? user.app_metadata.roles.map((role) => (
-                  // inline styles to be removed
-                  <span key={role} style={{ marginRight: '1rem' }}>
-                    {role}
-                  </span>
-                ))
-              : null}
-            {/* // inline styles to be removed */}
-            <Link
-              to={routes.adminUserView({ id: user.id })}
-              style={{ marginRight: '1rem' }}
-            >
-              view
-            </Link>
-            {/* // inline styles to be removed */}
-            <Link
-              to={routes.adminUserUpdate({ id: user.id })}
-              style={{ marginRight: '1rem' }}
-            >
-              edit
-            </Link>
-            <button onClick={() => onDelete(user)}>Delete</button>
-          </li>
-        ))}
-      </ul>
+      <UsersList users={users} onDelete={onDelete} />
     </>
   )
 }

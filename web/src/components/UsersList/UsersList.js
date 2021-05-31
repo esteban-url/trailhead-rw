@@ -44,7 +44,9 @@ const UsersList = ({ users }) => {
                             className="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
                             aria-hidden="true"
                           />
-                          {user.app_metadata.roles[0]}
+                          {user.app_metadata.roles?.length > 0
+                            ? user.app_metadata.roles[0]
+                            : 'user'}
                         </p>
                         <p className="text-sm text-gray-900">
                           Member since{' '}

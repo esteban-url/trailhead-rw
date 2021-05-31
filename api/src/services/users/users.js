@@ -87,23 +87,25 @@ export const createUser = async ({ input }) => {
 
   if (adminToken && identityEndpoint) {
     try {
+      const newUser = {
+        ...input,
+        confirm: true,
+        app_metadata: {
+          roles: ['user'],
+        },
+        user_metadata: {
+          ...input.user_metadata,
+          created_by: context.currentUser.email,
+          lastUpdated_by: context.currentUser.email,
+        },
+      }
       const { body } = await got.post(
         url,
         getRequestOptions({
-          body: JSON.stringify({
-            ...input,
-            confirm: true,
-            app_metadata: {
-              roles: ['user'],
-            },
-            user_metadata: {
-              ...input.user_metadata,
-              created_by: context.currentUser.email,
-              lastUpdated_by: context.currentUser.email,
-            },
-          }),
+          body: JSON.stringify(newUser),
         })
       )
+      await updateUser(newUser)
       return body
     } catch (error) {
       logError(`Identity: Failed to create user`, url, error)

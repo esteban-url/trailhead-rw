@@ -1,4 +1,5 @@
 import { Submit as RwSubmit } from '@redwoodjs/forms'
+import { Link } from '@redwoodjs/router'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -64,5 +65,26 @@ const Submit = ({
     </RwSubmit>
   )
 }
+const LinkButton = ({
+  size = 'md',
+  to,
+  variant = 'basic',
+  children,
+  ...rest
+}) => {
+  return (
+    <Link
+      to={to}
+      className={classNames(
+        commonClasses,
+        variantClasses[variant],
+        sizeClasses[size]
+      )}
+      {...rest}
+    >
+      {children}
+    </Link>
+  )
+}
 
-export { Button, Submit }
+export { Button, LinkButton, Submit }

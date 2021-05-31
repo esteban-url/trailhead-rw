@@ -23,7 +23,6 @@ const sizeClasses = {
 
 const Button = ({
   size = 'md',
-  icon,
   type = 'button',
   variant = 'basic',
   children,
@@ -46,7 +45,6 @@ const Button = ({
 }
 const Submit = ({
   size = 'md',
-  icon,
   variant = 'basic',
   children,
 

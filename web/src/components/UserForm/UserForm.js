@@ -43,7 +43,7 @@ const UserForm = ({ user, onSave, error, loading }) => {
       user_metadata: { full_name: data.name },
     }
     if (selectedRole) {
-      updatedUser.app_metadata = { roles: [selectedRole] }
+      updatedUser.app_metadata = { roles: [selectedRole.value] }
     }
     if (data.password) {
       updatedUser.password = data.password
@@ -54,7 +54,7 @@ const UserForm = ({ user, onSave, error, loading }) => {
     navigate(routes.adminUsers())
   }
   const handleRoleChange = (option) => {
-    setSelectedRole(option.value)
+    setSelectedRole(option)
   }
   const handleManualPassword = () => {
     setManuallyResetPassword(!manuallyResetPassword)

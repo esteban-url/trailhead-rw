@@ -97,7 +97,6 @@ export const Success = ({ user, update = false }) => {
   })
 
   const onSave = (user) => {
-    console.log(user)
     updateUser({ variables: { id: user.id, input: user } })
   }
   const DataField = ({ label, children }) => {

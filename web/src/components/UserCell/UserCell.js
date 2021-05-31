@@ -54,11 +54,9 @@ export const Success = ({ user, update = false }) => {
   const DataField = ({ label, children }) => {
     if (!children) return null
     return (
-      <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+      <div className="sm:col-span-1">
         <dt className="text-sm font-medium text-gray-500">{label}</dt>
-        <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-          {children}
-        </dd>
+        <dd className="mt-1 text-sm text-gray-900">{children}</dd>
       </div>
     )
   }
@@ -69,21 +67,20 @@ export const Success = ({ user, update = false }) => {
       <PageTitle>{user.user_metadata.full_name}</PageTitle>
 
       <div>
-        <div>
-          <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <Avatar className="h-16 w-16" name={user.email} variant="beam" />
-            </div>
-            <div className="ml-4">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
-                {user.user_metadata.full_name}
-              </h3>
-              <p className="text-sm text-gray-500">{user.email}</p>
-            </div>
+        <div className="flex items-center">
+          <div className="flex-shrink-0">
+            <Avatar className="h-16 w-16" name={user.email} variant="beam" />
+          </div>
+          <div className="ml-4">
+            <h3 className="text-lg leading-6 font-medium text-gray-900">
+              {user.user_metadata.full_name}
+            </h3>
+            <p className="text-sm text-gray-500">{user.email}</p>
           </div>
         </div>
-        <div className="mt-5 border-t border-gray-200">
-          <dl className="sm:divide-y sm:divide-gray-200">
+
+        <div className="mt-4 border-t border-gray-200 px-4 py-5 sm:px-6">
+          <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
             <DataField label="Full name">
               {user.user_metadata.full_name}
             </DataField>

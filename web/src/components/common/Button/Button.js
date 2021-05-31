@@ -4,12 +4,21 @@ function classNames(...classes) {
 // const colorClass = (color) => {
 //  return color?
 // }
-const Button = ({ size = 'md', icon, type = 'primary', children, ...rest }) => {
+const Button = ({
+  size = 'md',
+  icon,
+  type = 'primary',
+  children,
+
+  ...rest
+}) => {
   const commonClasses = `inline-flex items-center border border-transparent shadow-sm text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 `
   const typeClasses = {
     primary: 'focus:ring-primary-500 bg-primary-600 hover:bg-primary-700',
-    basic: 'focus:ring-gray-300 bg-gray-400 hover:bg-gray-500',
-    delete: 'focus:ring-red-500 bg-red-600 hover:bg-red-700',
+    basic:
+      'focus:ring-primary-500 bg-white hover:bg-gray-50 border border-gray-300 text-gray-700',
+    delete:
+      'text-red-700 text-gray-700 bg-red-100 hover:bg-red-200 focus:ring-red-500',
   }
   const sizeClasses = {
     xs: ' px-2.5 py-1.5 text-xs rounded',

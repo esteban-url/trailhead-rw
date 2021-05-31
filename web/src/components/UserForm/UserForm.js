@@ -11,6 +11,7 @@ import FormField from 'src/components/common/FormField/FormField'
 import { navigate, routes } from '@redwoodjs/router'
 import RadioGroup from 'src/components/common/RadioGroup/RadioGroup'
 import Switch from '../common/Switch/Switch'
+import Button from '../common/Button/Button'
 
 const roles = [
   {
@@ -27,7 +28,7 @@ const roles = [
 ]
 
 const UserForm = ({ user, onSave, error, loading }) => {
-  const [resetPassword, setResetPassword] = useState()
+  const [manuallyResetPassword, setManuallyResetPassword] = useState(false)
   const [selectedRole, setSelectedRole] = useState(() =>
     roles.find((x) => user?.app_metadata?.roles.includes(x.value))
   )
@@ -62,6 +63,10 @@ const UserForm = ({ user, onSave, error, loading }) => {
   const handleRoleChange = (option) => {
     setSelectedRole(option.value)
   }
+  const handleManualPassword = () => {
+    console.log('holi ')
+    setManuallyResetPassword(!manuallyResetPassword)
+  }
 
   return (
     <Form
@@ -74,7 +79,6 @@ const UserForm = ({ user, onSave, error, loading }) => {
           name="name"
           label="Name"
           register={register}
-          className="sm:col-span-4"
           validation={{ required: true }}
         />
         <FormField
@@ -82,18 +86,63 @@ const UserForm = ({ user, onSave, error, loading }) => {
           name="email"
           label="Email Address"
           register={register}
-          className="sm:col-span-4"
           validation={{
             required: true,
           }}
         />
 
         {user ? (
-          <FormField name="resetPassword" label="Reset Password">
-            <Switch label="reset password" onChange={setResetPassword} />
-          </FormField>
+          <>
+            <FormField label="Role">
+              <RadioGroup
+                options={roles}
+                label="role"
+                defaultValue={selectedRole}
+                onChange={handleRoleChange}
+              />
+            </FormField>
+            <div className="bg-gray-50 sm:rounded-lg sm:col-span-4">
+              <div className="px-4 py-5 sm:p-6">
+                <h3 className="leading-3 font-medium text-gray-900">
+                  Resetting the password?
+                </h3>
+                <div className="mt-2 max-w-xl text-sm text-gray-500">
+                  <p>
+                    You can send an email to this user so they reset the
+                    password on their own.
+                  </p>
+                  <div className="my-4">
+                    <Button
+                      onClick={() => alert('no implemented yet!')}
+                      type="basic"
+                    >
+                      Let the user reset their own password
+                    </Button>
+                  </div>
+                  <p>
+                    Are you sure you want to manually reset the user's password?
+                  </p>
+                </div>
+                <div className="mt-5">
+                  <Button onClick={handleManualPassword} type="basic">
+                    Yes, manually reset password
+                  </Button>
+                  {manuallyResetPassword ? (
+                    <FormField
+                      as={PasswordField}
+                      name="password"
+                      label="New password"
+                      className="sm:col-span-4 mt-4"
+                      register={register}
+                      validation={{ required: true }}
+                    />
+                  ) : null}
+                </div>
+              </div>
+            </div>
+          </>
         ) : null}
-        {!user || resetPassword ? (
+        {!user ? (
           <FormField
             as={PasswordField}
             name="password"
@@ -103,18 +152,7 @@ const UserForm = ({ user, onSave, error, loading }) => {
             validation={{ required: true }}
           />
         ) : null}
-        {user ? (
-          <div>
-            <FormField label="Role">
-              <RadioGroup
-                options={roles}
-                label="role"
-                defaultValue={selectedRole}
-                onChange={handleRoleChange}
-              />
-            </FormField>
-          </div>
-        ) : null}
+
         {error ? <span>{error.message}</span> : null}
         {loading ? <span>saving</span> : null}
       </div>

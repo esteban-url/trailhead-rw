@@ -115,7 +115,7 @@ export const Success = ({ user, update = false }) => {
       {deleteError ? <div>{JSON.stringify(deleteError)}</div> : null}
 
       <div>
-        <div className="bg-white pr-4 py-5 border-b border-gray-200 sm:pr-6">
+        <div className="bg-white pr-4 py-5 border-b border-gray-200 sm:pr-6 mb-8">
           <div className="-ml-4 -mt-4 flex justify-between items-center flex-wrap sm:flex-nowrap">
             <div className="ml-4 mt-4">
               <div className="flex items-center">
@@ -155,7 +155,7 @@ export const Success = ({ user, update = false }) => {
               error={error}
               loading={loading}
             />
-            <div className="bg-red-50 border border-red-500 rounded-lg mt-6">
+            <div className="bg-red-50 border border-red-500 rounded-lg mt-8">
               <div className="px-4 py-5 sm:p-6">
                 <h3 className="text-lg leading-6 font-medium text-gray-900">
                   Delete this user
@@ -172,7 +172,7 @@ export const Success = ({ user, update = false }) => {
             </div>
           </>
         ) : (
-          <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 mt-4">
+          <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 mt-8">
             <DataField label="Full name">
               {user.user_metadata.full_name}
             </DataField>

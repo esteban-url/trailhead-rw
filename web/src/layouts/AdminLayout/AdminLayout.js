@@ -25,10 +25,10 @@ const AdminLayout = ({ children }) => {
       icon: UserGroupIcon,
     },
     { name: 'Create New User', to: routes.adminUserNew(), icon: UserAddIcon },
-    { name: 'Account', to: '#', icon: CogIcon },
-    { name: 'Notifications', to: '#', icon: BellIcon },
-    { name: 'Billing', to: '#', icon: CreditCardIcon },
-    { name: 'Integrations', to: '#', icon: ViewGridAddIcon },
+    // { name: 'Account', to: '#', icon: CogIcon },
+    // { name: 'Notifications', to: '#', icon: BellIcon },
+    // { name: 'Billing', to: '#', icon: CreditCardIcon },
+    // { name: 'Integrations', to: '#', icon: ViewGridAddIcon },
   ]
   return (
     <div>

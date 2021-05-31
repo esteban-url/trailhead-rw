@@ -14,7 +14,7 @@ const roles = [
     value: 'user',
   },
   {
-    name: 'Admin role',
+    name: 'Admin user role',
     description: 'This user will have acces to the administraction features.',
     value: 'admin',
   },
@@ -31,7 +31,7 @@ const UserForm = ({ user, onSave, error, loading }) => {
           name: user?.user_metadata?.full_name,
           email: user?.email,
           admin: user?.app_metadata?.roles?.includes('admin'),
-          other: user?.app_metadata?.roles?.includes('other'),
+          user: user?.app_metadata?.roles?.includes('user'),
         }
       : {},
   })
@@ -43,7 +43,7 @@ const UserForm = ({ user, onSave, error, loading }) => {
       user_metadata: { full_name: data.name },
     }
     if (selectedRole) {
-      updatedUser.app_metadata = { roles: [selectedRole.value] }
+      updatedUser.app_metadata = { roles: [selectedRole] }
     }
     if (data.password) {
       updatedUser.password = data.password

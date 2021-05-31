@@ -80,17 +80,25 @@ export const Success = ({ user, update = false }) => {
     }
   }
 
-  const [createUser, { error, loading }] = useMutation(UPDATE_USER, {
+  const [updateUser, { error, loading }] = useMutation(UPDATE_USER, {
     onCompleted: () => {
-      navigate(routes.adminUsers())
       toast.success('User successfuly updated')
+      navigate(routes.adminUsers())
     },
     onError: () => {
       toast.error(`the user could not be updated.`)
     },
+
+    // This refetches the query on the list page. Read more about other ways to
+    // update the cache over here:
+    // https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
+    refetchQueries: [{ query: QUERY_USERS }],
+    awaitRefetchQueries: true,
   })
+
   const onSave = (user) => {
-    createUser({ variables: { id: user.id, input: user } })
+    console.log(user)
+    updateUser({ variables: { id: user.id, input: user } })
   }
   const DataField = ({ label, children }) => {
     if (!children) return null

@@ -4,7 +4,23 @@ import { useMutation } from '@redwoodjs/web'
 import toast from 'react-hot-toast'
 import { PageTitle } from 'src/utils/PageTitle'
 import UserForm from '../UserForm/UserForm'
+import { Button, LinkButton } from '../common/Button/Button'
 
+export const QUERY_USERS = gql`
+  query UsersQuery {
+    users {
+      id
+      email
+      created_at
+      user_metadata {
+        full_name
+      }
+      app_metadata {
+        roles
+      }
+    }
+  }
+`
 export const QUERY = gql`
   query UserQuery($id: String!) {
     user(id: $id) {
@@ -23,6 +39,11 @@ export const QUERY = gql`
     }
   }
 `
+const DELETE_USER = gql`
+  mutation DeleteUserMutation($id: String!) {
+    deleteUser(id: $id)
+  }
+`
 
 const UPDATE_USER = gql`
   mutation UpdateUserMutation($id: String!, $input: UpdateUserInput!) {
@@ -39,6 +60,26 @@ export const Empty = () => <div>Empty</div>
 export const Failure = ({ error }) => <div>Error: {error.message}</div>
 
 export const Success = ({ user, update = false }) => {
+  const [deleteUser, { error: deleteError }] = useMutation(DELETE_USER, {
+    onCompleted: () => {
+      navigate(routes.adminUsers())
+      toast.success('User successfuly deleted')
+    },
+    onError: () => {
+      toast.error(`the user could not be deleted.`)
+    },
+    // This refetches the query on the list page. Read more about other ways to
+    // update the cache over here:
+    // https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
+    refetchQueries: [{ query: QUERY_USERS }],
+    awaitRefetchQueries: true,
+  })
+  const onDelete = (user) => {
+    if (confirm(`Are you sure you want to delete ${user.email}?`)) {
+      deleteUser({ variables: { id: user.id } })
+    }
+  }
+
   const [createUser, { error, loading }] = useMutation(UPDATE_USER, {
     onCompleted: () => {
       navigate(routes.adminUsers())
@@ -60,27 +101,70 @@ export const Success = ({ user, update = false }) => {
       </div>
     )
   }
-  return update ? (
-    <UserForm user={user} onSave={onSave} error={error} loading={loading} />
-  ) : (
+  return (
     <>
       <PageTitle>{user.user_metadata.full_name}</PageTitle>
+      {deleteError ? <div>{JSON.stringify(deleteError)}</div> : null}
 
       <div>
-        <div className="flex items-center">
-          <div className="flex-shrink-0">
-            <Avatar className="h-16 w-16" name={user.email} variant="beam" />
-          </div>
-          <div className="ml-4">
-            <h3 className="text-lg leading-6 font-medium text-gray-900">
-              {user.user_metadata.full_name}
-            </h3>
-            <p className="text-sm text-gray-500">{user.email}</p>
+        <div className="bg-white pr-4 py-5 border-b border-gray-200 sm:pr-6">
+          <div className="-ml-4 -mt-4 flex justify-between items-center flex-wrap sm:flex-nowrap">
+            <div className="ml-4 mt-4">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <Avatar
+                    className="h-16 w-16 rounded-full"
+                    name={user.email}
+                    variant="beam"
+                  />
+                </div>
+                <div className="ml-4">
+                  <h3 className="text-lg leading-6 font-medium text-gray-900">
+                    {user.user_metadata.full_name}
+                  </h3>
+                  <p className="text-sm text-gray-500">{user.email}</p>
+                </div>
+              </div>
+            </div>
+            <div className="ml-4 mt-4 flex-shrink-0 flex">
+              {update ? (
+                <LinkButton to={routes.adminUserView({ id: user.id })}>
+                  View User
+                </LinkButton>
+              ) : (
+                <LinkButton to={routes.adminUserUpdate({ id: user.id })}>
+                  Edit User
+                </LinkButton>
+              )}
+            </div>
           </div>
         </div>
-
-        <div className="mt-4 border-t border-gray-200 px-4 py-5 sm:px-6">
-          <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
+        {update ? (
+          <>
+            <UserForm
+              user={user}
+              onSave={onSave}
+              error={error}
+              loading={loading}
+            />
+            <div className="bg-red-50 border border-red-500 rounded-lg mt-6">
+              <div className="px-4 py-5 sm:p-6">
+                <h3 className="text-lg leading-6 font-medium text-gray-900">
+                  Delete this user
+                </h3>
+                <div className="mt-2 max-w-xl text-sm text-gray-500">
+                  <p>Deleting a user is an irreversible action.</p>
+                </div>
+                <div className="mt-5">
+                  <Button onClick={() => onDelete(user)} variant="delete">
+                    Delete user
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </>
+        ) : (
+          <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 mt-4">
             <DataField label="Full name">
               {user.user_metadata.full_name}
             </DataField>
@@ -98,7 +182,7 @@ export const Success = ({ user, update = false }) => {
               {user.confirmation_sent_at}
             </DataField>
           </dl>
-        </div>
+        )}
       </div>
     </>
   )

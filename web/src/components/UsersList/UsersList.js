@@ -1,115 +1,72 @@
 import { Link, routes } from '@redwoodjs/router'
 import Avatar from 'boring-avatars'
-import { Button } from '../common/Button/Button'
-import { TrashIcon } from '@heroicons/react/outline'
-const UsersList = ({ users, onDelete }) => {
+import {
+  MailIcon,
+  ShieldCheckIcon,
+  ChevronRightIcon,
+} from '@heroicons/react/outline'
+const UsersList = ({ users }) => {
   return (
-    <div className="flex flex-col">
-      <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-          <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Name
-                  </th>
-                  {/* <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Title
-                  </th> */}
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Status
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Role
-                  </th>
-                  <th scope="col" className="relative px-6 py-3">
-                    <span className="sr-only">Edit</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {users.map((user) => (
-                  <tr key={user.email}>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <Link to={routes.adminUserView({ id: user.id })}>
-                        <div className="flex items-center">
-                          <div className="flex-shrink-0 h-10 w-10">
-                            <Avatar variant={`beam`} name={user.email} />
-                          </div>
-                          <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">
-                              {user.user_metadata.full_name}
-                            </div>
-                            <div className="text-sm text-gray-500">
-                              {user.email}
-                            </div>
-                          </div>
-                        </div>
-                      </Link>
-                    </td>
-                    {/* <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{user.title}</div>
-                      <div className="text-sm text-gray-500">
-                        {user.department}
+    <div className="bg-white shadow overflow-hidden sm:rounded-md">
+      <ul className="divide-y divide-gray-200">
+        {users.map((user) => (
+          <li key={user.email}>
+            <Link
+              className="block hover:bg-gray-50"
+              to={routes.adminUserView({ id: user.id })}
+            >
+              <div className="flex items-center px-4 py-4 sm:px-6">
+                <div className="min-w-0 flex-1 flex items-center">
+                  <div className="flex-shrink-0">
+                    <Avatar
+                      className="h-12 w-12 rounded-full"
+                      variant={`beam`}
+                      name={user.email}
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
+                    <div>
+                      <p className="text-sm font-medium text-indigo-600 truncate">
+                        {user.user_metadata.full_name}
+                      </p>
+                      <p className="mt-2 flex items-center text-sm text-gray-500">
+                        <MailIcon
+                          className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+                          aria-hidden="true"
+                        />
+                        <span className="truncate">{user.email}</span>
+                      </p>
+                    </div>
+                    <div className="hidden md:block">
+                      <div>
+                        <p className="mt-2 flex items-center text-sm text-gray-500">
+                          <ShieldCheckIcon
+                            className="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
+                            aria-hidden="true"
+                          />
+                          {user.app_metadata.roles[0]}
+                        </p>
+                        <p className="text-sm text-gray-900">
+                          Member since{' '}
+                          <time dateTime={user.created_at}>
+                            {user.created_at}
+                          </time>
+                        </p>
                       </div>
-                    </td> */}
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                        Active
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {user.app_metadata?.roles
-                        ? user.app_metadata.roles.map((role) => (
-                            // inline styles to be removed
-                            <span key={role} style={{ marginRight: '1rem' }}>
-                              {role}
-                            </span>
-                          ))
-                        : null}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex justify-end space-x-4">
-                      <Button
-                        variant="delete"
-                        size="xs"
-                        onClick={() => onDelete(user)}
-                      >
-                        <TrashIcon className="h-4 " />
-                      </Button>
-
-                      <Link
-                        to={routes.adminUserView({ id: user.id })}
-                        className="text-primary-600 hover:text-primary-900 py-1.5"
-                      >
-                        View
-                      </Link>
-                      <Link
-                        to={routes.adminUserUpdate({ id: user.id })}
-                        className="text-primary-600 hover:text-primary-900  py-1.5"
-                      >
-                        Edit
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <ChevronRightIcon
+                    className="h-5 w-5 text-gray-400"
+                    aria-hidden="true"
+                  />
+                </div>
+              </div>
+            </Link>
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }

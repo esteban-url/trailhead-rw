@@ -1,18 +1,13 @@
-import { routes, navigate } from '@redwoodjs/router'
-import { useMutation } from '@redwoodjs/web'
-import { toast } from '@redwoodjs/web/toast'
+import { routes } from '@redwoodjs/router'
+import { LinkButton } from '../common/Button/Button'
 import UsersList from '../UsersList/UsersList'
 
-const DELETE_USER = gql`
-  mutation DeleteUserMutation($id: String!) {
-    deleteUser(id: $id)
-  }
-`
 export const QUERY = gql`
   query UsersQuery {
     users {
       id
       email
+      created_at
       user_metadata {
         full_name
       }
@@ -30,29 +25,23 @@ export const Empty = () => <div>Empty</div>
 export const Failure = ({ error }) => <div>Error: {error.message}</div>
 
 export const Success = ({ users }) => {
-  const [deleteUser, { error }] = useMutation(DELETE_USER, {
-    onCompleted: () => {
-      navigate(routes.adminUsers())
-      toast.success('User successfuly deleted')
-    },
-    onError: () => {
-      toast.error(`the user could not be deleted.`)
-    },
-    // This refetches the query on the list page. Read more about other ways to
-    // update the cache over here:
-    // https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
-    refetchQueries: [{ query: QUERY }],
-    awaitRefetchQueries: true,
-  })
-  const onDelete = (user) => {
-    if (confirm(`Are you sure you want to delete ${user.email}?`)) {
-      deleteUser({ variables: { id: user.id } })
-    }
-  }
   return (
     <>
-      {error ? <div>{error}</div> : null}
-      <UsersList users={users} onDelete={onDelete} />
+      <div className="bg-white px-1 py-5 border-b border-gray-200 sm:px-0">
+        <div className="-ml-4 -mt-2 flex items-center justify-between flex-wrap sm:flex-nowrap">
+          <div className="ml-4 mt-2">
+            <h3 className="text-lg leading-6 font-medium text-gray-900">
+              Users List
+            </h3>
+          </div>
+          <div className="ml-4 mt-2 flex-shrink-0">
+            <LinkButton to={routes.adminUserNew()} variant="primary">
+              Create new user
+            </LinkButton>
+          </div>
+        </div>
+      </div>
+      <UsersList users={users} />
     </>
   )
 }

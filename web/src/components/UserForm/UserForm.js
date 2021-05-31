@@ -93,7 +93,7 @@ const UserForm = ({ user, onSave, error, loading }) => {
                 onChange={handleRoleChange}
               />
             </FormField>
-            <div className="bg-gray-50 sm:rounded-lg sm:col-span-4">
+            <div className="bg-gray-50 rounded-lg sm:col-span-6">
               <div className="px-4 py-5 sm:p-6">
                 <h3 className="leading-3 font-medium text-gray-900">
                   Resetting the password?
@@ -109,12 +109,15 @@ const UserForm = ({ user, onSave, error, loading }) => {
                     </Button>
                   </div>
                   <p>
-                    Are you sure you want to manually reset the user's password?
+                    Are you sure you want to manually reset the user&apos;s
+                    password?
                   </p>
                 </div>
                 <div className="mt-5">
                   <Button onClick={handleManualPassword} variant="basic">
-                    Yes, manually reset password
+                    {`${
+                      manuallyResetPassword ? "Nevermind, don't" : 'Yes,'
+                    } manually reset the password`}
                   </Button>
                   {manuallyResetPassword ? (
                     <FormField

@@ -139,7 +139,6 @@ const UserForm = ({ user, onSave, error, loading }) => {
             as={PasswordField}
             name="password"
             label="Password"
-            className="sm:col-span-4"
             register={register}
             validation={{ required: true }}
           />

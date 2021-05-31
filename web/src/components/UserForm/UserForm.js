@@ -23,7 +23,7 @@ const roles = [
 const UserForm = ({ user, onSave, error, loading }) => {
   const [manuallyResetPassword, setManuallyResetPassword] = useState(false)
   const [selectedRole, setSelectedRole] = useState(() =>
-    roles.find((x) => user?.app_metadata?.roles.includes(x.value))
+    roles.find((x) => user?.app_metadata?.roles?.includes(x.value))
   )
   const { register } = useForm({
     defaultValues: user

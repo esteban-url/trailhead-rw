@@ -87,25 +87,23 @@ export const createUser = async ({ input }) => {
 
   if (adminToken && identityEndpoint) {
     try {
-      const newUser = {
-        ...input,
-        confirm: true,
-        app_metadata: {
-          roles: ['user'],
-        },
-        user_metadata: {
-          ...input.user_metadata,
-          created_by: context.currentUser.email,
-          lastUpdated_by: context.currentUser.email,
-        },
-      }
       const { body } = await got.post(
         url,
         getRequestOptions({
-          body: JSON.stringify(newUser),
+          body: JSON.stringify({
+            ...input,
+            confirm: true,
+            app_metadata: {
+              roles: ['user'],
+            },
+            user_metadata: {
+              ...input.user_metadata,
+              created_by: context.currentUser.email,
+              lastUpdated_by: context.currentUser.email,
+            },
+          }),
         })
       )
-      await updateUser(newUser)
       return body
     } catch (error) {
       logError(`Identity: Failed to create user`, url, error)
@@ -160,7 +158,6 @@ const mockedUsers = [
     email: 'regular@user.com',
     user_metadata: { full_name: 'Regular user', __typename: 'UserMetadata' },
     app_metadata: {
-      roles: ['user'],
       created_by: 'esteban@fakemail.com',
       lastUpdated_by: 'esteban@fakemail.com',
       __typename: 'AppMetadata',

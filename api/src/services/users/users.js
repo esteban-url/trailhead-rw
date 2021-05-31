@@ -62,7 +62,10 @@ export const updateUser = async ({ input }) => {
         getRequestOptions({
           body: JSON.stringify({
             ...input,
-            user_metadata: { lastUpdatedBy: context.currentUser.email },
+            user_metadata: {
+              ...input.user_metadata,
+              lastUpdatedBy: context.currentUser.email,
+            },
           }),
         })
       )

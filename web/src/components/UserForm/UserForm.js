@@ -1,17 +1,10 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import {
-  EmailField,
-  Form,
-  PasswordField,
-  Submit,
-  TextField,
-} from '@redwoodjs/forms/dist'
+import { EmailField, Form, PasswordField, TextField } from '@redwoodjs/forms'
 import FormField from 'src/components/common/FormField/FormField'
 import { navigate, routes } from '@redwoodjs/router'
 import RadioGroup from 'src/components/common/RadioGroup/RadioGroup'
-import Switch from '../common/Switch/Switch'
-import Button from '../common/Button/Button'
+import { Button, Submit } from '../common/Button/Button'
 
 const roles = [
   {
@@ -64,7 +57,6 @@ const UserForm = ({ user, onSave, error, loading }) => {
     setSelectedRole(option.value)
   }
   const handleManualPassword = () => {
-    console.log('holi ')
     setManuallyResetPassword(!manuallyResetPassword)
   }
 
@@ -112,10 +104,7 @@ const UserForm = ({ user, onSave, error, loading }) => {
                     password on their own.
                   </p>
                   <div className="my-4">
-                    <Button
-                      onClick={() => alert('no implemented yet!')}
-                      type="basic"
-                    >
+                    <Button onClick={() => alert('no implemented yet!')}>
                       Let the user reset their own password
                     </Button>
                   </div>
@@ -124,7 +113,7 @@ const UserForm = ({ user, onSave, error, loading }) => {
                   </p>
                 </div>
                 <div className="mt-5">
-                  <Button onClick={handleManualPassword} type="basic">
+                  <Button onClick={handleManualPassword} variant="basic">
                     Yes, manually reset password
                   </Button>
                   {manuallyResetPassword ? (
@@ -158,18 +147,9 @@ const UserForm = ({ user, onSave, error, loading }) => {
       </div>
 
       <div className="pt-5">
-        <div className="flex justify-end">
-          <button
-            type="button"
-            onClick={handleCancel}
-            className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-          >
-            Cancel
-          </button>
-          <Submit
-            className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-            disabled={loading}
-          >
+        <div className="flex justify-end space-x-4">
+          <Button onClick={handleCancel}>Cancel</Button>
+          <Submit variant="primary" disabled={loading}>
             Save User
           </Submit>
         </div>

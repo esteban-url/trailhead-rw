@@ -1,6 +1,6 @@
 import { Link, routes } from '@redwoodjs/router'
 import Avatar from 'boring-avatars'
-import Button from '../common/Button/Button'
+import { Button } from '../common/Button/Button'
 import { TrashIcon } from '@heroicons/react/outline'
 const UsersList = ({ users, onDelete }) => {
   return (
@@ -44,19 +44,21 @@ const UsersList = ({ users, onDelete }) => {
                 {users.map((user) => (
                   <tr key={user.email}>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="flex-shrink-0 h-10 w-10">
-                          <Avatar variant={`beam`} name={user.email} />
-                        </div>
-                        <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">
-                            {user.user_metadata.full_name}
+                      <Link to={routes.adminUserView({ id: user.id })}>
+                        <div className="flex items-center">
+                          <div className="flex-shrink-0 h-10 w-10">
+                            <Avatar variant={`beam`} name={user.email} />
                           </div>
-                          <div className="text-sm text-gray-500">
-                            {user.email}
+                          <div className="ml-4">
+                            <div className="text-sm font-medium text-gray-900">
+                              {user.user_metadata.full_name}
+                            </div>
+                            <div className="text-sm text-gray-500">
+                              {user.email}
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      </Link>
                     </td>
                     {/* <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">{user.title}</div>
@@ -81,7 +83,7 @@ const UsersList = ({ users, onDelete }) => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex justify-end space-x-4">
                       <Button
-                        type="delete"
+                        variant="delete"
                         size="xs"
                         onClick={() => onDelete(user)}
                       >

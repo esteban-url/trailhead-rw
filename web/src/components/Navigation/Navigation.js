@@ -10,6 +10,7 @@ import {
   XIcon,
   BellIcon,
 } from '@heroicons/react/outline'
+import { Button } from '../common/Button/Button'
 const classNames = (...classes) => {
   return classes.filter(Boolean).join(' ')
 }
@@ -121,10 +122,10 @@ const LoginMenu = ({ mobile }) => {
                   {currentUser.email}
                 </div>
               </div>
-              <button className="ml-auto bg-gray-800 flex-shrink-0 p-1 text-gray-400 rounded-full hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+              <Button className="ml-auto bg-gray-800 flex-shrink-0 p-1 text-gray-400 rounded-full hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                 <span className="sr-only">View notifications</span>
                 <BellIcon className="h-6 w-6" aria-hidden="true" />
-              </button>
+              </Button>
             </div>
             <div className="mt-3 px-2 space-y-1">
               {userNavigation.map((item) => (
@@ -134,12 +135,12 @@ const LoginMenu = ({ mobile }) => {
                   className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
                 />
               ))}
-              <button
+              <Button
                 className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
                 onClick={logOut}
               >
                 Logout
-              </button>
+              </Button>
             </div>
           </div>
         </>

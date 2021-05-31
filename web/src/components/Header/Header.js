@@ -9,6 +9,7 @@ import {
   UserCircleIcon,
   XIcon,
 } from '@heroicons/react/outline'
+import { Button } from '../common/Button/Button'
 
 const classNames = (...classes) => {
   return classes.filter(Boolean).join(' ')
@@ -164,12 +165,12 @@ const LoginMenu = ({ mobile }) => {
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-50"
             />
           ))}
-          <button
+          <Button
             className="block px-3 text-left w-full py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-50"
             onClick={logOut}
           >
             Logout
-          </button>
+          </Button>
         </>
       )
     } else {
@@ -225,12 +226,12 @@ const LoginMenu = ({ mobile }) => {
                     </Menu.Item>
                   ))}
                   <Menu.Item key="Logout">
-                    <button
+                    <Button
                       className="block px-4 w-full py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
                       onClick={logOut}
                     >
                       Sign out
-                    </button>
+                    </Button>
                   </Menu.Item>
                 </Menu.Items>
               </Transition>

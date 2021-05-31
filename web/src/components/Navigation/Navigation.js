@@ -109,7 +109,7 @@ const LoginMenu = ({ mobile }) => {
                 /> */}
 
                 <Avatar
-                  className="h-10 w-10"
+                  className="h-10 w-10 rounded-full"
                   name={currentUser.email}
                   variant="beam"
                 />
@@ -158,7 +158,7 @@ const LoginMenu = ({ mobile }) => {
                 <div>
                   <Menu.Button className="max-w-xs text-gray-400 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 lg:p-2 lg:rounded-md ">
                     <Avatar
-                      className="h-8 w-8"
+                      className="h-8 w-8 rounded-full"
                       name={currentUser.email}
                       variant="beam"
                     />

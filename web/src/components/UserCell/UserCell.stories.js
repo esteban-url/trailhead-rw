@@ -1,3 +1,5 @@
+import { HelmetProvider } from 'react-helmet-async'
+import { PageTitleProvider } from 'src/utils/PageTitle'
 import { Loading, Empty, Failure, Success } from './UserCell'
 import { standard } from './UserCell.mock'
 
@@ -14,7 +16,13 @@ export const failure = () => {
 }
 
 export const success = () => {
-  return Success ? <Success {...standard()} /> : null
+  return Success ? (
+    <HelmetProvider>
+      <PageTitleProvider>
+        <Success {...standard()} />{' '}
+      </PageTitleProvider>
+    </HelmetProvider>
+  ) : null
 }
 
 export default { title: 'Cells/UserCell' }

@@ -1,4 +1,5 @@
 import { navigate, routes } from '@redwoodjs/router'
+import Avatar from 'boring-avatars'
 import { useMutation } from '@redwoodjs/web'
 import toast from 'react-hot-toast'
 import { PageTitle } from 'src/utils/PageTitle'
@@ -50,19 +51,58 @@ export const Success = ({ user, update = false }) => {
   const onSave = (user) => {
     createUser({ variables: { id: user.id, input: user } })
   }
+  const DataField = ({ label, children }) => {
+    if (!children) return null
+    return (
+      <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+        <dt className="text-sm font-medium text-gray-500">{label}</dt>
+        <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          {children}
+        </dd>
+      </div>
+    )
+  }
   return update ? (
     <UserForm user={user} onSave={onSave} error={error} loading={loading} />
   ) : (
     <>
       <PageTitle>{user.user_metadata.full_name}</PageTitle>
-      <h3>{user.user_metadata.full_name}</h3>
-      <p>Email: {user.email}</p>
-      <p>Created: {user?.created_at}</p>
-      <p>Updated: {user?.updated_at}</p>
-      <p>Created by: {user.app_metadata?.created_by}</p>
-      <p>Last Updated by: {user.app_metadata?.lastUpdated_by}</p>
-      <p>Confirmed at: {user.confirmated_at}</p>
-      <p>Confirmation sent at: {user.confirmation_sent_at}</p>
+
+      <div>
+        <div>
+          <div className="flex items-center">
+            <div className="flex-shrink-0">
+              <Avatar className="h-16 w-16" name={user.email} variant="beam" />
+            </div>
+            <div className="ml-4">
+              <h3 className="text-lg leading-6 font-medium text-gray-900">
+                {user.user_metadata.full_name}
+              </h3>
+              <p className="text-sm text-gray-500">{user.email}</p>
+            </div>
+          </div>
+        </div>
+        <div className="mt-5 border-t border-gray-200">
+          <dl className="sm:divide-y sm:divide-gray-200">
+            <DataField label="Full name">
+              {user.user_metadata.full_name}
+            </DataField>
+            <DataField label="Email">{user.email}</DataField>
+            <DataField label="Created">{user.created_at}</DataField>
+            <DataField label="Updated">{user.updated_at}</DataField>
+            <DataField label="Created by">
+              {user.app_metadata.created_by}
+            </DataField>
+            <DataField label="Last Updated by">
+              {user.app_metadata.lastUpdated_by}
+            </DataField>
+            <DataField label="Confirmed at">{user.confirmed_at}</DataField>
+            <DataField label="Confirmation sent at:">
+              {user.confirmation_sent_at}
+            </DataField>
+          </dl>
+        </div>
+      </div>
     </>
   )
 }

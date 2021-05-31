@@ -1,12 +1,12 @@
 import { useAuth } from '@redwoodjs/auth'
 import { Link, NavLink, routes } from '@redwoodjs/router'
 import { Fragment } from 'react'
+import Avatar from 'boring-avatars'
 import { Menu, Transition, Disclosure } from '@headlessui/react'
 import {
   ChevronDownIcon,
   GlobeIcon,
   MenuIcon,
-  UserCircleIcon,
   XIcon,
   BellIcon,
 } from '@heroicons/react/outline'
@@ -106,7 +106,12 @@ const LoginMenu = ({ mobile }) => {
                   src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                   alt=""
                 /> */}
-                <UserCircleIcon className="h-10 w-10 text-gray-400" />
+
+                <Avatar
+                  className="h-10 w-10"
+                  name={currentUser.email}
+                  variant="beam"
+                />
               </div>
               <div className="ml-3">
                 <div className="text-base font-medium leading-none text-white">
@@ -151,7 +156,11 @@ const LoginMenu = ({ mobile }) => {
               <>
                 <div>
                   <Menu.Button className="max-w-xs text-gray-400 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 lg:p-2 lg:rounded-md ">
-                    <UserCircleIcon className=" h-8 w-8" />
+                    <Avatar
+                      className="h-8 w-8"
+                      name={currentUser.email}
+                      variant="beam"
+                    />
                     {/* <img
                           className="h-8 w-8 rounded-full"
                           src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"

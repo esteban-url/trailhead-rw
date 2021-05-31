@@ -11,7 +11,7 @@ const FormField = ({
   ...rest
 }) => {
   return (
-    <div className={`${className ? className : 'sm:col-span-4 '}`}>
+    <div className={`${className ? className : 'sm:col-span-6 '}`}>
       <Label
         name={name}
         className="block text-sm font-medium text-gray-700"

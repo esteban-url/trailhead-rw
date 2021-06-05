@@ -156,7 +156,11 @@ const mockedUsers = [
   {
     id: 'd58c26d5-c3e4-4f4c-97af-a3838976e7f1',
     email: 'regular@user.com',
-    user_metadata: { full_name: 'Regular user', __typename: 'UserMetadata' },
+    user_metadata: {
+      full_name: 'Regular user',
+      avatar_type: 'pixel',
+      __typename: 'UserMetadata',
+    },
     app_metadata: {
       created_by: 'esteban@fakemail.com',
       lastUpdated_by: 'esteban@fakemail.com',
@@ -181,7 +185,7 @@ const mockedUsers = [
     __typename: 'User',
   },
   {
-    id: 'f7d63030-2233-4a7c-8568-3a9e28c9551b',
+    id: 'f7d63030-2233-4a7c-8518-3a9e28c9551b',
     email: 'estebanjrojas@gmail.com',
     user_metadata: { full_name: 'Esteban', __typename: 'UserMetadata' },
     app_metadata: {

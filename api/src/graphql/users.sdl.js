@@ -6,6 +6,7 @@ export const schema = gql`
   }
   type UserMetadata {
     full_name: String
+    avatar_type: String
   }
 
   type User {

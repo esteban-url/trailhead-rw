@@ -104,6 +104,7 @@ export type User = {
 export type UserMetadata = {
   __typename?: 'UserMetadata';
   full_name?: Maybe<Scalars['String']>;
+  avatar_type?: Maybe<Scalars['String']>;
 };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
@@ -116,7 +117,7 @@ export type UsersQuery = (
     & Pick<User, 'id' | 'email' | 'created_at'>
     & { user_metadata?: Maybe<(
       { __typename?: 'UserMetadata' }
-      & Pick<UserMetadata, 'full_name'>
+      & Pick<UserMetadata, 'full_name' | 'avatar_type'>
     )>, app_metadata?: Maybe<(
       { __typename?: 'AppMetadata' }
       & Pick<AppMetadata, 'roles'>
@@ -136,7 +137,7 @@ export type UserQuery = (
     & Pick<User, 'id' | 'email' | 'created_at' | 'updated_at'>
     & { user_metadata?: Maybe<(
       { __typename?: 'UserMetadata' }
-      & Pick<UserMetadata, 'full_name'>
+      & Pick<UserMetadata, 'full_name' | 'avatar_type'>
     )>, app_metadata?: Maybe<(
       { __typename?: 'AppMetadata' }
       & Pick<AppMetadata, 'roles' | 'created_by' | 'lastUpdated_by'>

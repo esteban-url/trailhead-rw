@@ -14,6 +14,7 @@ export const QUERY_USERS = gql`
       created_at
       user_metadata {
         full_name
+        avatar_type
       }
       app_metadata {
         roles
@@ -28,6 +29,7 @@ export const QUERY = gql`
       email
       user_metadata {
         full_name
+        avatar_type
       }
       app_metadata {
         roles
@@ -122,7 +124,7 @@ export const Success = ({ user, update = false }) => {
                   <Avatar
                     className="h-16 w-16 rounded-full"
                     name={user.email}
-                    variant="beam"
+                    variant={user.user_metadata.avatar_type || 'beam'}
                   />
                 </div>
                 <div className="ml-4">

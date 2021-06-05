@@ -20,7 +20,7 @@ const UsersList = ({ users }) => {
                   <div className="flex-shrink-0">
                     <Avatar
                       className="h-12 w-12 rounded-full"
-                      variant={`beam`}
+                      variant={user.user_metadata.avatar_type || 'beam'}
                       name={user.email}
                     />
                   </div>

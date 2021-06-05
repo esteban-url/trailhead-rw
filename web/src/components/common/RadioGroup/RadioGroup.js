@@ -5,7 +5,9 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 const RadioGroup = ({ options = [], defaultValue, label, onChange }) => {
-  const [selected, setSelected] = useState(defaultValue)
+  const [selected, setSelected] = useState(() =>
+    options.find((x) => x.value === defaultValue?.value)
+  )
   const handleChange = (value) => {
     setSelected(value)
     onChange(value)

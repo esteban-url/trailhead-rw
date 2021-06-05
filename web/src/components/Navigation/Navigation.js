@@ -111,7 +111,7 @@ const LoginMenu = ({ mobile }) => {
                 <Avatar
                   className="h-10 w-10 rounded-full"
                   name={currentUser.email}
-                  variant="beam"
+                  variant={currentUser.user_metadata.avatar_type || 'beam'}
                 />
               </div>
               <div className="ml-3">
@@ -160,7 +160,7 @@ const LoginMenu = ({ mobile }) => {
                     <Avatar
                       className="h-8 w-8 rounded-full"
                       name={currentUser.email}
-                      variant="beam"
+                      variant={currentUser.user_metadata.avatar_type || 'beam'}
                     />
                     {/* <img
                           className="h-8 w-8 rounded-full"

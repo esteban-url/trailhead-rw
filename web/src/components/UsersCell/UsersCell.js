@@ -10,6 +10,7 @@ export const QUERY = gql`
       created_at
       user_metadata {
         full_name
+        avatar_type
       }
       app_metadata {
         roles

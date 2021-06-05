@@ -106,6 +106,7 @@ export type User = {
 export type UserMetadata = {
   __typename?: 'UserMetadata';
   full_name?: Maybe<Scalars['String']>;
+  avatar_type?: Maybe<Scalars['String']>;
 };
 
 
@@ -285,6 +286,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 
 export type UserMetadataResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserMetadata'] = ResolversParentTypes['UserMetadata']> = {
   full_name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  avatar_type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

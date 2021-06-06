@@ -13,5 +13,4 @@
   schemaPath = "./api/db/schema.prisma"
 [browser]
   open = true
-[experimental]
-  esbuild = true
+

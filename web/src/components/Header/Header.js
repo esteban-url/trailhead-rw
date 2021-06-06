@@ -6,10 +6,10 @@ import {
   ChevronDownIcon,
   GlobeIcon,
   MenuIcon,
-  UserCircleIcon,
   XIcon,
 } from '@heroicons/react/outline'
 import { Button } from '../common/Button/Button'
+import Avatar from 'boring-avatars'
 
 const classNames = (...classes) => {
   return classes.filter(Boolean).join(' ')
@@ -180,7 +180,11 @@ const LoginMenu = ({ mobile }) => {
             <>
               <div>
                 <Menu.Button className="max-w-xs text-white rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 lg:p-2 lg:rounded-md ">
-                  <UserCircleIcon className=" h-8 w-8" />
+                  <Avatar
+                    className="h-8 w-8 rounded-full"
+                    name={currentUser.email}
+                    variant={currentUser.user_metadata.avatar_type || 'beam'}
+                  />
                   {/* <img
                           className="h-8 w-8 rounded-full"
                           src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"

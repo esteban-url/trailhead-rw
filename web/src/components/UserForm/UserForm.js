@@ -54,7 +54,7 @@ const UserForm = ({ user, onSave, error, loading }) => {
       email: data.email,
       user_metadata: {
         full_name: data.name,
-        avatar_type: selectedAvatarType.name,
+        avatar_type: selectedAvatarType?.name || 'beam',
       },
     }
     if (selectedRole) {
@@ -216,7 +216,7 @@ const AvatarTypesRadio = ({ user, options, defaultValue, onChange }) => {
                     <HUIRadioGroup.Label className="text-center font-medium text-gray-900">
                       <Avatar
                         className="w-16 h-16"
-                        name={user.email}
+                        name={user?.email || 'new user'}
                         variant={avatarType.name}
                       />
                       <span className="sr-only">{avatarType.name}</span>

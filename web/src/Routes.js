@@ -22,8 +22,8 @@ const Routes = () => {
         <Set wrap={[PageTitleProvider, PublicLayout]}>
           <Route path="/about" page={AboutPage} name="about" />
           <Private unauthenticated="home">
-            <Route path="/users/me" page={ProfilePage} name="me" />
-            <Route path="/users/{id}" page={ProfilePage} name="profile" />
+            {/* <Route path="/users/me" page={ProfilePage} name="me" />
+            <Route path="/users/{id}" page={ProfilePage} name="profile" /> */}
             <Route path="/private" page={PrivatePage} name="private" />
           </Private>
         </Set>

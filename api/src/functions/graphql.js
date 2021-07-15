@@ -7,6 +7,7 @@ import {
 import { getAuthenticationContext } from '@redwoodjs/api/dist/auth'
 import schemas from 'src/graphql/**/*.{js,ts}'
 import { db } from 'src/lib/db'
+import { logger } from 'src/lib/logger'
 import services from 'src/services/**/*.{js,ts}'
 
 import { getCurrentUser } from 'src/lib/auth'
@@ -17,6 +18,7 @@ export const handler = createGraphQLHandler({
     return authContext
   },
   getCurrentUser,
+  loggerConfig: { logger, options: {} },
   schema: makeMergedSchema({
     schemas,
     services: makeServices({ services }),

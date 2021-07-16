@@ -5,8 +5,7 @@ import FormField from 'src/components/common/FormField/FormField'
 import { navigate, routes } from '@redwoodjs/router'
 import RadioGroup from 'src/components/common/RadioGroup/RadioGroup'
 import { Button, Submit } from '../common/Button/Button'
-import { RadioGroup as HUIRadioGroup } from '@headlessui/react'
-import Avatar from 'boring-avatars'
+import AvatarTypesRadio from '../common/AvatarTypesRadio/AvatarTypesRadio'
 const roles = [
   {
     name: 'Regular user role',
@@ -72,6 +71,7 @@ const UserForm = ({ user, onSave, error, loading }) => {
     setSelectedRole(option)
   }
   const handleAvatarTypeChange = (option) => {
+    console.log(option)
     setSelectedAvatarType(option)
   }
   const handleManualPassword = () => {
@@ -185,57 +185,4 @@ const UserForm = ({ user, onSave, error, loading }) => {
   )
 }
 
-const AvatarTypesRadio = ({ user, options, defaultValue, onChange }) => {
-  const [selected, setSelected] = useState(
-    () => options.find((x) => x.name === defaultValue?.name) || options[1]
-  )
-
-  function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-  }
-
-  return (
-    <HUIRadioGroup value={selected} onChange={setSelected}>
-      <HUIRadioGroup.Label className="sr-only">Avatar Type</HUIRadioGroup.Label>
-      <div className="flex justify-items-center w-full  space-x-4">
-        {options.map((avatarType) => (
-          <HUIRadioGroup.Option
-            key={avatarType.name}
-            value={avatarType}
-            className={({ active }) =>
-              classNames(
-                active ? 'ring-1 ring-offset-2 ring-primary-500' : '',
-                'relative block rounded-full border border-gray-300 bg-white shadow-sm p-1.5 cursor-pointer hover:border-gray-400 sm:flex sm:justify-between focus:outline-none'
-              )
-            }
-          >
-            {({ checked }) => (
-              <>
-                <div className="flex items-center">
-                  <div className="text-sm">
-                    <HUIRadioGroup.Label className="text-center font-medium text-gray-900">
-                      <Avatar
-                        className="w-16 h-16"
-                        name={user?.email || 'new user'}
-                        variant={avatarType.name}
-                      />
-                      <span className="sr-only">{avatarType.name}</span>
-                    </HUIRadioGroup.Label>
-                  </div>
-                </div>
-                <div
-                  className={classNames(
-                    checked ? 'border-primary-500' : 'border-transparent',
-                    'absolute -inset-px rounded-full border-2 pointer-events-none'
-                  )}
-                  aria-hidden="true"
-                />
-              </>
-            )}
-          </HUIRadioGroup.Option>
-        ))}
-      </div>
-    </HUIRadioGroup>
-  )
-}
 export default UserForm

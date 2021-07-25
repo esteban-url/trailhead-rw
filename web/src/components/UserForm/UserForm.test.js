@@ -18,7 +18,9 @@ describe('UserForm', () => {
       user().user.user_metadata.full_name
     )
     expect(
-      screen.getByRole('switch', { name: /reset password/i })
+      screen.getByRole('button', {
+        name: /Yes, manually reset the password/i,
+      })
     ).toBeInTheDocument()
     expect(
       screen.getByRole('button', { name: /save user/i })
@@ -34,8 +36,8 @@ describe('UserForm', () => {
   it('shows password field when reseting password', () => {
     render(<UserForm {...user()} />)
 
-    const resetPasswordSwitch = screen.getByRole('switch', {
-      name: /reset password/i,
+    const resetPasswordSwitch = screen.getByRole('button', {
+      name: /Yes, manually reset the password/i,
     })
 
     expect(resetPasswordSwitch).toBeInTheDocument()

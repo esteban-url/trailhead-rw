@@ -7,6 +7,7 @@ export const standard = (/* vars, { ctx, req } */) => ({
     { name: 'bauhaus' },
     { name: 'ring' },
   ],
+  defaultValue: { name: 'beam' },
   onChange: (params) => {
     console.log(params)
   },

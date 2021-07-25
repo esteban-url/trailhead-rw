@@ -31,7 +31,7 @@ const avatarTypes = [
 const UserForm = ({ user, onSave, error, loading }) => {
   const [manuallyResetPassword, setManuallyResetPassword] = useState(false)
   const [selectedAvatarType, setSelectedAvatarType] = useState(() =>
-    avatarTypes.find((x) => user?.user_metadata?.avatar_type === x.name)
+    avatarTypes.find((x) => x.name === user?.user_metadata?.avatar_type)
   )
   const [selectedRole, setSelectedRole] = useState(() =>
     roles.find((x) => user?.app_metadata?.roles?.includes(x.value))
@@ -53,7 +53,7 @@ const UserForm = ({ user, onSave, error, loading }) => {
       email: data.email,
       user_metadata: {
         full_name: data.name,
-        avatar_type: selectedAvatarType?.name || 'beam',
+        avatar_type: selectedAvatarType?.name,
       },
     }
     if (selectedRole) {

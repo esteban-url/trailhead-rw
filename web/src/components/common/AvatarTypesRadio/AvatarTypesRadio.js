@@ -1,14 +1,25 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { RadioGroup as HUIRadioGroup } from '@headlessui/react'
 import Avatar from 'boring-avatars'
-const AvatarTypesRadio = ({ user, options, defaultValue, onChange }) => {
-  const [selected, setSelected] = useState(
-    () => options.find((x) => x.name === defaultValue?.name) || options[1]
-  )
 
-  function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-  }
+function classNames(...classes) {
+  return classes.filter(Boolean).join(' ')
+}
+
+const AvatarTypesRadio = ({
+  user,
+  options,
+  defaultValue = 'beam',
+  onChange,
+}) => {
+  const [selected, setSelected] = useState()
+
+  useEffect(() => {
+    if (options && defaultValue) {
+      setSelected(options.find((x) => x.name === defaultValue.name))
+    }
+  }, [options, defaultValue])
+
   const handleChange = (value) => {
     setSelected(value)
     onChange(value)
@@ -18,7 +29,7 @@ const AvatarTypesRadio = ({ user, options, defaultValue, onChange }) => {
     <HUIRadioGroup value={selected} onChange={handleChange}>
       <HUIRadioGroup.Label className="sr-only">Avatar Type</HUIRadioGroup.Label>
       <div className="flex justify-items-center w-full  space-x-4">
-        {options.map((avatarType) => (
+        {options?.map((avatarType) => (
           <HUIRadioGroup.Option
             key={avatarType.name}
             value={avatarType}
@@ -39,7 +50,12 @@ const AvatarTypesRadio = ({ user, options, defaultValue, onChange }) => {
                         name={user?.email || 'new user'}
                         variant={avatarType.name}
                       />
-                      <span className="sr-only">{avatarType.name}</span>
+                      <span
+                        data-testid={checked ? avatarType.name : ''}
+                        className="sr-only"
+                      >
+                        {avatarType.name}
+                      </span>
                     </HUIRadioGroup.Label>
                   </div>
                 </div>

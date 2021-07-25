@@ -9,7 +9,7 @@ const UsersList = ({ users }) => {
   return (
     <div className="bg-white shadow overflow-hidden sm:rounded-md">
       <ul className="divide-y divide-gray-200">
-        {users.map((user) => (
+        {users?.map((user) => (
           <li key={user.email}>
             <Link
               className="block hover:bg-gray-50"

@@ -34,7 +34,7 @@ const SettingsPage = () => {
   })
 
   const handleChange = (user) => {
-    updateUser({ variables: {  id: user.id, input: user  })
+    updateUser({ variables: { id: user.id, input: user } })
     console.log(user)
   }
   return (

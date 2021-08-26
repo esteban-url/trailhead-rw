@@ -11,9 +11,6 @@ import {
   BellIcon,
 } from '@heroicons/react/outline'
 import { Button } from '../common/Button/Button'
-const classNames = (...classes) => {
-  return classes.filter(Boolean).join(' ')
-}
 
 const Navigation = () => {
   const navigation = [
@@ -91,8 +88,8 @@ const Navigation = () => {
 
 const LoginMenu = ({ mobile }) => {
   const userNavigation = [
-    { name: 'Your Profile', to: '#' },
-    { name: 'Settings', to: '#' },
+    { name: 'Profile', to: routes.profile() },
+    { name: 'Settings', to: routes.settings() },
   ]
   const { logIn, logOut, isAuthenticated, currentUser } = useAuth()
   if (isAuthenticated) {
@@ -194,15 +191,13 @@ const LoginMenu = ({ mobile }) => {
                     {userNavigation.map((item) => (
                       <Menu.Item key={item.name}>
                         {({ active }) => (
-                          <a
-                            href={item.href}
-                            className={classNames(
-                              active ? 'bg-gray-100' : '',
-                              'block px-4 py-2 text-sm text-gray-700'
-                            )}
+                          <NavItem
+                            item={item}
+                            className=" block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            activeClassName="bg-gray-100 block px-4 py-2 text-sm text-gray-700"
                           >
                             {item.name}
-                          </a>
+                          </NavItem>
                         )}
                       </Menu.Item>
                     ))}

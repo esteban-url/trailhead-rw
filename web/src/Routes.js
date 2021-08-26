@@ -24,6 +24,8 @@ const Routes = () => {
           <Private unauthenticated="home">
             {/* <Route path="/users/me" page={ProfilePage} name="me" />
             <Route path="/users/{id}" page={ProfilePage} name="profile" /> */}
+            <Route path="/profile" page={ProfilePage} name="profile" />
+            <Route path="/settings" page={SettingsPage} name="settings" />
             <Route path="/private" page={PrivatePage} name="private" />
           </Private>
         </Set>

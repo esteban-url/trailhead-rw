@@ -30,7 +30,7 @@ export const schema = gql`
     app_metadata: JSONObject
   }
   input UpdateUserInput {
-    id: String!
+    id: String
     email: String!
     password: String
     roles: [String]
@@ -40,6 +40,7 @@ export const schema = gql`
   type Mutation {
     createUser(input: CreateUserInput!): User!
     updateUser(id: String!, input: UpdateUserInput!): User!
+    updateOwnUser(input: UpdateUserInput!): User!
     deleteUser(id: String!): Boolean
   }
 

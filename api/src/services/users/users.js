@@ -6,18 +6,18 @@ import { logger } from 'src/lib/logger'
 
 const getContextData = () => {
   return {
-    adminToken: context.clientContext?.identity?.token,
+    token: context.clientContext?.identity?.token,
     identityEndpoint: context.clientContext?.identity?.url,
   }
 }
 
 const getRequestOptions = (overrides) => {
-  const { adminToken } = getContextData()
+  const { token } = getContextData()
 
   return {
     responseType: 'json',
     headers: {
-      authorization: `Bearer ${adminToken}`,
+      authorization: `Bearer ${token}`,
     },
     ...overrides,
   }
@@ -36,10 +36,10 @@ const logError = (title, url, error) => {
 export const deleteUser = async ({ id }) => {
   requireAuth({ role: 'admin' })
 
-  const { adminToken, identityEndpoint } = getContextData()
+  const { token, identityEndpoint } = getContextData()
   const url = `${identityEndpoint}/admin/users/${id}`
 
-  if (adminToken && identityEndpoint) {
+  if (token && identityEndpoint) {
     try {
       await got.delete(url, getRequestOptions())
     } catch (error) {
@@ -52,10 +52,10 @@ export const deleteUser = async ({ id }) => {
 export const updateUser = async ({ input }) => {
   requireAuth({ role: 'admin' })
 
-  const { adminToken, identityEndpoint } = getContextData()
+  const { token, identityEndpoint } = getContextData()
   const url = `${identityEndpoint}/admin/users/${input.id}`
 
-  if (adminToken && identityEndpoint) {
+  if (token && identityEndpoint) {
     try {
       const { body } = await got.put(
         url,
@@ -82,10 +82,10 @@ export const updateUser = async ({ input }) => {
 export const createUser = async ({ input }) => {
   requireAuth({ role: 'admin' })
 
-  const { adminToken, identityEndpoint } = getContextData()
+  const { token, identityEndpoint } = getContextData()
   const url = `${identityEndpoint}/admin/users`
 
-  if (adminToken && identityEndpoint) {
+  if (token && identityEndpoint) {
     try {
       const { body } = await got.post(
         url,
@@ -117,10 +117,10 @@ export const createUser = async ({ input }) => {
 export const user = async ({ id }) => {
   requireAuth({ role: 'admin' })
 
-  const { adminToken, identityEndpoint } = getContextData()
+  const { token, identityEndpoint } = getContextData()
   const url = `${identityEndpoint}/admin/users/${id}`
 
-  if (adminToken && identityEndpoint) {
+  if (token && identityEndpoint) {
     try {
       const { body } = await got.get(url, getRequestOptions())
       return body
@@ -136,10 +136,10 @@ export const user = async ({ id }) => {
 export const users = async () => {
   requireAuth({ role: 'admin' })
 
-  const { adminToken, identityEndpoint } = getContextData()
+  const { token, identityEndpoint } = getContextData()
   const url = `${identityEndpoint}/admin/users`
 
-  if (adminToken && identityEndpoint) {
+  if (token && identityEndpoint) {
     try {
       const { body } = await got.get(url, getRequestOptions())
       return body['users']
@@ -149,6 +149,38 @@ export const users = async () => {
     }
   } else {
     return mockedUsers
+  }
+}
+
+export const updateOwnUser = async ({ input }) => {
+  requireAuth()
+
+  const { token, identityEndpoint } = getContextData()
+  const url = `${identityEndpoint}/user`
+  console.log({ token }, { identityEndpoint })
+  if (token && identityEndpoint) {
+    try {
+      const { body } = await got.put(
+        url,
+        getRequestOptions({
+          body: JSON.stringify({
+            ...input,
+            user_metadata: {
+              ...input.user_metadata,
+              lastUpdatedBy: context.currentUser.email,
+            },
+          }),
+        })
+      )
+      console.log('🔥🔥🔥🔥🔥')
+      console.log(body)
+      return body
+    } catch (error) {
+      logError(`Identity: Failed to update user`, url, error)
+      throw new Error(error.response?.body.msg || "Can't update the user")
+    }
+  } else {
+    return mockedUsers.find((x) => x.id === input.id)
   }
 }
 

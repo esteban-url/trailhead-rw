@@ -1,5 +1,5 @@
 import { useAuth } from '@redwoodjs/auth'
-import { Link, routes } from '@redwoodjs/router'
+import { Link, NavLink, routes } from '@redwoodjs/router'
 import { Fragment } from 'react'
 import { Menu, Popover, Transition } from '@headlessui/react'
 import {
@@ -85,7 +85,11 @@ const Nav = () => {
               </div>
               <div className="hidden space-x-10 lg:flex lg:ml-10">
                 {navigation.map((item) => (
-                  <NavItem key={item.name} item={item} />
+                  <NavItem
+                    key={item.name}
+                    item={item}
+                    className="text-base font-medium text-white hover:text-primary-200"
+                  />
                 ))}
               </div>
             </div>
@@ -150,8 +154,8 @@ const Nav = () => {
 
 const LoginMenu = ({ mobile }) => {
   const userNavigation = [
-    { name: 'Your Profile', to: '#' },
-    { name: 'Settings', to: '#' },
+    { name: 'Profile', to: routes.profile() },
+    { name: 'Settings', to: routes.settings() },
   ]
   const { logIn, logOut, isAuthenticated, currentUser } = useAuth()
   if (isAuthenticated) {
@@ -217,15 +221,13 @@ const LoginMenu = ({ mobile }) => {
                   {userNavigation.map((item) => (
                     <Menu.Item key={item.name}>
                       {({ active }) => (
-                        <a
-                          href={item.href}
-                          className={classNames(
-                            active ? 'bg-gray-100' : '',
-                            'block px-4 py-2 text-sm text-gray-700'
-                          )}
+                        <NavItem
+                          item={item}
+                          className=" block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          activeClassName="bg-gray-100 block px-4 py-2 text-sm text-gray-700"
                         >
                           {item.name}
-                        </a>
+                        </NavItem>
                       )}
                     </Menu.Item>
                   ))}
@@ -258,10 +260,7 @@ const LoginMenu = ({ mobile }) => {
   }
 }
 
-const NavItem = ({ item, className }) => {
-  if (!className) {
-    className = 'text-base font-medium text-white hover:text-primary-200'
-  }
+const NavItem = ({ item, className, activeClassName }) => {
   const { isAuthenticated, hasRole } = useAuth()
   if (item.href) {
     return (
@@ -275,9 +274,13 @@ const NavItem = ({ item, className }) => {
         {(!item.autenticated && !item.role) ||
         isAuthenticated ||
         hasRole(item.role) ? (
-          <Link to={item.to} className={className}>
+          <NavLink
+            to={item.to}
+            className={className}
+            activeClassName={activeClassName}
+          >
             {item.name}
-          </Link>
+          </NavLink>
         ) : null}
       </>
     )

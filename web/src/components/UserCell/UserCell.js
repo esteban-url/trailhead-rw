@@ -1,10 +1,10 @@
 import { navigate, routes } from '@redwoodjs/router'
 import Avatar from 'boring-avatars'
 import { useMutation } from '@redwoodjs/web'
-import toast from 'react-hot-toast'
 import { PageTitle } from 'src/utils/PageTitle'
 import UserForm from '../UserForm/UserForm'
 import { Button, LinkButton } from '../common/Button/Button'
+import { toast } from '@redwoodjs/web/toast'
 
 export const QUERY_USERS = gql`
   query UsersQuery {
